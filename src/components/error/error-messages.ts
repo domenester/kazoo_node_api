@@ -1,5 +1,5 @@
 export const login = {
-  unauthorized: "Apenas usuários do perfil “Administrador” ou “Relatórios” devem ser permitidos o acesso ao sistema",
+  unauthorized: "Credenciais inválidas",
 };
 
 export const changePassword = {
