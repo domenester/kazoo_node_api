@@ -3,13 +3,11 @@
 import { expect } from "chai";
 import "mocha";
 import * as request from "request-promise";
-import { promisify } from "util";
 import {default as logger} from "../../../../components/logger/logger";
 import server from "../../../../server";
 import { login as errorMessages } from "../../../error/error-messages";
-import { IRequest } from "../../endpoint.interface";
 import Login from "./login";
-import { userIdDefault, userPasswordDefault, usernameDefault } from "../../../../mocks";
+import { userPasswordDefault, usernameDefault } from "../../../../mocks";
 import { NODE_HOST, NODE_PORT } from "../../../../config/env";
 import LoginApi from "../login.api";
 
@@ -35,7 +33,7 @@ const requestLoginService = async (body) => {
   }
 }
 
-describe.only("Testing Login", async () => {
+describe("Testing Login", async () => {
 
   before( async () => {
     await server.start();

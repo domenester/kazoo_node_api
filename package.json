@@ -6,7 +6,7 @@
   "scripts": {
     "start": "if [ ! -d '/node_modules' ]; then npm i; export NODE_ENV=production && npm run build && pm2 start process.yml; fi",
     "dev": "export NODE_ENV=development && npm run build && copyfiles -u 1 src/public/**/* dist/ && node .",
-    "test": "export NODE_ENV=test && mocha -r ts-node/register src/**/*.spec.ts --exit",
+    "test": "export NODE_ENV=test && mocha -r ts-node/register src/**/**/*.spec.ts --exit",
     "test-prod": "export NODE_ENV=test-prod && mocha -r ts-node/register src/**/*.spec.ts --exit",
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",

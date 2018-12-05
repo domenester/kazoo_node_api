@@ -17,5 +17,4 @@ export interface IUserNew {
   extension: string;
   email: string;
   department: string;
-  profile: string;
 }
