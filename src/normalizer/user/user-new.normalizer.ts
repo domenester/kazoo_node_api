@@ -6,6 +6,8 @@ export const userNewNormalized = (userNew: IUserNew) => ({
     last_name: userNew.department,
     email: userNew.email,
     username:userNew.racf,
-    password: "123456"
+    password: "123456",
+    devices: [],
+    callflow: null
   }
 });

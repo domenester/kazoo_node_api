@@ -7,7 +7,7 @@ import { AuthApiService } from "../auth-api.service";
 export const CallflowCreateService = async (
   userId: string, username: string, extension: string
 ): Promise<any> => {
-  const path = `${process.env.KAZOO_API_URL}/callflows`;
+  const path = `${process.env.KAZOO_URL_SERVICES}/callflows`;
   const response = await request(
     path, {
       body: JSON.stringify(

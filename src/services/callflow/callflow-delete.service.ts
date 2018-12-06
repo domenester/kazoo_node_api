@@ -1,21 +1,17 @@
 import * as request from "request-promise";
 import { errorGenerator, login as errorMessage } from "../../components/error";
 import {default as logger} from "../../components/logger/logger";
-import { deviceCreateNormalized } from "../../normalizer/device";
 import { AuthApiService } from "../auth-api.service";
 
-export const DeviceCreateService = async (userId: string, username: string, token?: string): Promise<any> => {
-  const path = `${process.env.KAZOO_URL_SERVICES}/devices`;
+export const CallflowDeleteService = async (callflowId: string): Promise<any> => {
+  const path = `${process.env.KAZOO_URL_SERVICES}/callflows/${callflowId}`;
   const response = await request(
     path, {
-      body: JSON.stringify(
-        deviceCreateNormalized(userId, username)
-      ),
       headers: {
         "Content-Type": "application/json",
-        "X-Auth-Token" : token || await AuthApiService()
+        "X-Auth-Token" : await AuthApiService()
       },
-      method: "PUT",
+      method: "DELETE",
       rejectUnauthorized: false,
     },
   ).then(res => JSON.parse(res))
@@ -24,7 +20,7 @@ export const DeviceCreateService = async (userId: string, username: string, toke
     return errorGenerator(
       err,
       err.statusCode,
-      "DeviceCreateService");
+      "DeviceDeleteService");
   });
   
   return response;

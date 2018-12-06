@@ -13,5 +13,5 @@ const UserNewSchema = {
 
 export const UserNewValidation = ( body: any ) => {
   return joi.validate(body, UserNewSchema)
-  .catch( (err) => errorGenerator(err.message, 401, "UserNewValidation"));
+  .catch( (err) => errorGenerator(err.message, 400, "UserNewValidation"));
 };

@@ -139,7 +139,7 @@ class Server {
               const result = await endpoint.handler({
                 body: Object.keys(req.body).length > 0 ? req.body : req.files || req.file || {},
                 headers: req.headers,
-                parameters: req.query
+                parameters: { ...req.query, ...req.params }
               });
 
               if (result instanceof Error) {

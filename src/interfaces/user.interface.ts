@@ -18,3 +18,14 @@ export interface IUserNew {
   email: string;
   department: string;
 }
+
+export interface IUserUpdate {
+  id: string;
+  name?: string;
+  racf?: string;
+  extension?: string;
+  email?: string;
+  department?: string;
+  devices?: Array<string>;
+  callflow?: string;
+}
