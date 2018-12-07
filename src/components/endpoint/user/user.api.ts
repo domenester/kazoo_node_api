@@ -6,6 +6,7 @@ import UserNew from "./endpoints/user-new";
 import UserDelete from "./endpoints/user-delete";
 import UserList from "./endpoints/user-list";
 import UserById from "./endpoints/user-by-id";
+import UserUpdatePassword from "./endpoints/user-update-password";
 
 class UserApi implements IEndpointAPI {
   public path = "/users";
@@ -17,7 +18,8 @@ class UserApi implements IEndpointAPI {
       new UserNew(this.logger, this.path),
       new UserById(this.logger, this.path),
       new UserDelete(this.logger, this.path),
-      new UserList(this.logger, this.path)
+      new UserList(this.logger, this.path),
+      new UserUpdatePassword(this.logger, this.path)
     ];
   }
 }
