@@ -15,5 +15,5 @@ const UserUpdateSchema = {
 
 export const UserUpdateValidation = ( body: any ) => {
   return joi.validate(body, UserUpdateSchema)
-  .catch( (err) => errorGenerator(err.message, 401, "UserUpdateValidation"));
+  .catch( (err) => errorGenerator(err.message, 400, "UserUpdateValidation"));
 };

@@ -122,7 +122,7 @@ describe("Testing User New", async () => {
     expect(response.code).to.be.equal(400);
   });
 
-  it.only("should add new user", async () => {
+  it("should add new user", async () => {
 
     const body: IUserNew = {
       name: "Valid Name",
@@ -132,15 +132,14 @@ describe("Testing User New", async () => {
       department: "Valid department",
     };
 
-    let response = await addUserService(body);
+    let response = await addUserService(body).catch(err => err);
     
-    userAdded = response.data;
-    expect(typeof response.data.data.callflow === "string").to.not.be.true;
+    userAdded = response.data.data;
+    expect(typeof response.data.data.callflow === "string").to.be.true;
     expect(response.data.data.devices.length).to.be.equal(1);
-    
   }).timeout(10000);
 
-  it.only("should remove user, device and callflow added", async () => {
+  it("should remove user, device and callflow added", async () => {
     const userResponse = await UserDeleteService(userAdded.id);
     expect(userResponse.status).to.be.equal("success");
 
@@ -149,5 +148,5 @@ describe("Testing User New", async () => {
 
     const callflowResponse = await CallflowDeleteService(userAdded.callflow);
     expect(callflowResponse.status).to.be.equal("success");
-  });
+  }).timeout(10000);
 });

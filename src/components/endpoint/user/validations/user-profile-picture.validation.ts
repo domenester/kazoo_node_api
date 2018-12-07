@@ -11,5 +11,5 @@ const UserProfilePictureSchema = {
 
 export const UserProfilePictureValidation = ( body: any ) => {
   return joi.validate(body, UserProfilePictureSchema)
-  .catch( (err) => errorGenerator(err.message, 401, "UserProfilePictureValidation"));
+  .catch( (err) => errorGenerator(err.message, 400, "UserProfilePictureValidation"));
 };
