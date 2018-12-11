@@ -84,7 +84,7 @@ class Server {
       }
       
       middlewares.push(cors({
-        allowedHeaders: ['Authorization', 'Content-Type'],
+        allowedHeaders: ['Authorization', 'Content-Type', 'cache-control', 'userid'],
         exposedHeaders: ['Authorization'],
         origin: "*",
         methods: "GET,HEAD,PUT,PATCH,POST,DELETE",

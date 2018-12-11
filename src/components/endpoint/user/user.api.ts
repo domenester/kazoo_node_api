@@ -7,6 +7,9 @@ import UserDelete from "./endpoints/user-delete";
 import UserList from "./endpoints/user-list";
 import UserById from "./endpoints/user-by-id";
 import UserUpdatePassword from "./endpoints/user-update-password";
+import UserResetPassword from "./endpoints/user-reset-password";
+import UserUpdate from "./endpoints/user-update";
+import UploadProfilePicture from "./endpoints/user-update-picture";
 
 class UserApi implements IEndpointAPI {
   public path = "/users";
@@ -15,11 +18,14 @@ class UserApi implements IEndpointAPI {
   constructor(logger: winston.Logger) {
     this.logger = logger;
     this.endpoints = [
+      new UploadProfilePicture(this.logger, this.path),
       new UserNew(this.logger, this.path),
       new UserById(this.logger, this.path),
       new UserDelete(this.logger, this.path),
       new UserList(this.logger, this.path),
-      new UserUpdatePassword(this.logger, this.path)
+      new UserUpdatePassword(this.logger, this.path),
+      new UserResetPassword(this.logger, this.path),
+      new UserUpdate(this.logger, this.path)
     ];
   }
 }

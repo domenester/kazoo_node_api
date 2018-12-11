@@ -1,130 +1,99 @@
-// // tslint:disable:no-unused-expression
+// tslint:disable:no-unused-expression
 
-// import { expect } from "chai";
-// import "mocha";
-// import * as request from "request-promise";
-// import { promisify } from "util";
-// import {default as logger} from "../../../../components/logger/logger";
-// import server from "../../../../server";
-// import UserUpdate from "./user-update";
-// import UserApi from "../user.api";
-// import enums from "../enums";
-// import { JsonWebTokenError } from "jsonwebtoken";
-// import { NODE_HOST, NODE_PORT } from "../../../../config/env";
-// import { IUserNew } from "../../../../interfaces";
-// import { addUserService } from "./user-new.spec";
-// import { deleteUserService } from "./user-delete.spec";
+import { expect } from "chai";
+import "mocha";
+import * as request from "request-promise";
+import {default as logger} from "../../../../components/logger/logger";
+import server from "../../../../server";
+import UserUpdate from "./user-update";
+import UserApi from "../user.api";
+import responseMessages from "../../../../config/endpoints-response-messages";
+import { IUserNew, IUserUpdate } from "../../../../interfaces";
+import { NODE_HOST, NODE_PORT } from "../../../../config/env";
+import { UserDeleteService } from "../../../../services/user/user-delete.service";
+import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
+import { CallflowDeleteService } from "../../../../services/callflow/callflow-delete.service";
+import { UserService } from "../../../../services";
+import { addUserService } from "./user-new.spec";
 
-// const requestService = async (body: any) => {
-//   const env = process.env;
-//   const userApi = new UserApi(logger);
-//   const userUpdate = new UserUpdate(logger);
+export const updateUserService = async (body: IUserUpdate) => {
+  const userApi = new UserApi(logger);
+  const userUpdate = new UserUpdate(logger, userApi.path);
 
-//   let response = await request(
-//     `http://${NODE_HOST()}:${NODE_PORT()}${userApi.path}${userUpdate.path}`,
-//     {
-//       method: userUpdate.method,
-//       body: JSON.stringify(body),
-//       headers: { "Content-Type": "application/json" },
-//       rejectUnauthorized: false
-//     },
-//   ).catch((e) => JSON.parse(e.error));
+  let response = await request(
+    `http://${NODE_HOST()}:${NODE_PORT()}${userUpdate.fullPath}${body.id}`,
+    {
+      method: userUpdate.method,
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+      rejectUnauthorized: false
+    },
+  ).catch(err => JSON.parse(err.error));
 
-//   if ( response instanceof Error ) return response;
+  try {
+    return JSON.parse(response);
+  } catch (err) {
+    return response;
+  }
+}
 
-//   let responseParsed: any;
-//   try {
-//     responseParsed = JSON.parse(response);
-//   } catch (err) { responseParsed = response; }
-//   return responseParsed;
-// }
+describe("Testing User Update", async () => {
 
-// describe("Testing User Update", async () => {
-  
-//   let userIdAdded: string;
-  
-//   it("Starting server...", async () => {
-//     await server.start();
-//   }).timeout(10000);
+  let userAdded: any;
 
-//   after( async () => {
-//     server.stop();
-//   });
+  before("Starting server...", async () => {
+    await server.start();
+  });
 
-//   it("should create new user to test updates", async () => {
+  after( async () => {
+    server.stop();
+  });
 
-//     const body: IUserNew = {
-//       name: "User to Update",
-//       racf: "userupdate",
-//       extension: "12345",
-//       email: "userupdateracf@valid.com",
-//       department: "Valid department",
-//       profile: "Administrador"
-//     };
+  it("should add new user to update it", async () => {
 
-//     let response = await addUserService(body);
-//     userIdAdded = response.data.id;
-//     expect(response.data).to.not.be.null;
-//   }).timeout(10000);
+    const body: IUserNew = {
+      name: "Valid Name",
+      racf: "useradd",
+      extension: "12345",
+      email: "validemail@valid.com",
+      department: "Valid department",
+    };
 
-//   it("should update an user", async () => {
-//     const body = {
-//       id: userIdAdded,
-//       name: "Valid Name Changed",
-//       extension: "12346",
-//       email: "validemailchanged@valid.com",
-//       department: "Valid department changed",
-//       profile: "Administrador"
-//     };
+    let response = await addUserService(body).catch(err => err);
+    
+    userAdded = response.data.data;
+    expect(typeof response.data.data.callflow === "string").to.be.true;
+    expect(response.data.data.devices.length).to.be.equal(1);
+  }).timeout(10000);
 
-//     let response = await requestService(body);
+  it("should update the user's attributes", async () => {
 
-//     expect(response.data.first_name).to.be.eq(body.name);
-//     expect(response.data.email).to.be.eq(body.email);
-//     expect(response.data.last_name).to.be.eq(body.department);
-//   }).timeout(10000);
+    const body: IUserUpdate = {
+      id: userAdded.id,
+      name: "User Update Changed",
+      racf: "userchange",
+      extension: "2222",
+      email: "userupdatechanged@valid.com",
+      department: "department changed",
+    };
 
-//   it.skip("should update an user with just some fields", async () => {
+    let response = await updateUserService(body);
+    const userUpdated = response.data.data;
+    expect(userUpdated.email).to.be.equal(body.email);
+    expect(userUpdated.first_name).to.be.equal(body.name);
+    expect(userUpdated.last_name).to.be.equal(body.department);
+    expect(userUpdated.extension).to.be.equal(body.extension);
+    expect(userUpdated.username).to.be.equal(userAdded.username);
+  }).timeout(10000);
 
-//     const body = {
-//       id: "e4a45df3222c8117121681c58d1a2e59",
-//       name: "Valid Name"
-//     };
+  it("should remove user, device and callflow added", async () => {
+    const userResponse = await UserDeleteService(userAdded.id);
+    expect(userResponse.status).to.be.equal("success");
 
-//     let response = await requestService(body);
+    const deviceResponse = await DeviceDeleteService(userAdded.devices[0]);
+    expect(deviceResponse.status).to.be.equal("success");
 
-//     expect(response.data).to.be.deep.equal('Not implemented yet');
-//   });
-
-//   it("should throw error because no user id was passed", async () => {
-
-//     const body = {
-//       name: "Valid Name",
-//       racf: "Valid Racf",
-//       extension: "12345",
-//       email: "validemail@valid.com",
-//       department: "Valid department",
-//       profile: "Administrador"
-//     };
-
-//     let response = await requestService(body);
-
-//     expect(response.code).to.be.equal(401);
-//   });
-
-//   it("should throw error because no user was passed", async () => {
-
-//     const body = {
-//       id: userIdAdded
-//     };
-
-//     let response = await requestService(body);
-
-//     expect(response.code).to.be.equal(401);
-//   });
-
-//   it("should delete the user created to update tests", async () => {
-//     let response = await deleteUserService(userIdAdded);
-//     expect(response.data).to.be.eq(true);
-//   }).timeout(10000);
-// });
+    const callflowResponse = await CallflowDeleteService(userAdded.callflow);
+    expect(callflowResponse.status).to.be.equal("success");
+  }).timeout(10000);
+});
