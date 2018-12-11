@@ -11,6 +11,9 @@ import { NODE_HOST, NODE_PORT } from "../../../../config/env";
 import { IUserNew } from "../../../../interfaces";
 import { addUserService } from "./user-new.spec";
 import { UserNew } from "../../../../services/user/user-new.service";
+import { UserDeleteService } from "../../../../services/user/user-delete.service";
+import { DeviceDeleteService } from "../../../../services/device";
+import { CallflowDeleteService } from "../../../../services";
 
 export const deleteUserService = async (userId: string) => {
   const env = process.env;
@@ -33,6 +36,15 @@ export const deleteUserService = async (userId: string) => {
   } catch (err) {
     return response;
   }
+}
+
+export const deleteUserDevicesCallflows = async (userAdded: any) => {
+  return new Promise( async (resolve, reject) => {
+    await UserDeleteService(userAdded.id).catch(err => reject(err));
+    await DeviceDeleteService(userAdded.devices[0]).catch(err => reject(err));
+    await CallflowDeleteService(userAdded.callflow).catch(err => reject(err));
+    resolve();
+  });
 }
 
 describe("Testing User Delete", async () => {
