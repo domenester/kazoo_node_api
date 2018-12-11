@@ -3,7 +3,8 @@ export const login = {
 };
 
 export const user = {
-  byEmail: "Nenhum usuário encontrado."
+  byEmail: "Nenhum usuário encontrado.",
+  notFound: "Nenhum usuário encontrado."
 } 
 
 export const changePassword = {
@@ -18,6 +19,10 @@ export const resetPassword = {
   invalidToken: "Token inválido",
   expiredToken: "Token expirado"
 };
+
+export const updateUserPicture = {
+  formatInvalid: "Format de imagem inválido"
+}
 
 export default {
   changePassword,

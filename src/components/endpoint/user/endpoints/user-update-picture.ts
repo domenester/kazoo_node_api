@@ -1,11 +1,17 @@
 import {Request} from "express-serve-static-core";
 import * as winston from "winston";
 import {IEndpoint, IRequest, Verb, HandlerResponse} from "../../../endpoint/endpoint.interface";
+import { imagesFormatsAllowed, pathToUpload } from "../../../../config/images";
+import { updateUserPicture as errorMessage } from "../../../error/error-messages";
 import * as fs from "fs";
+import { promisify } from "util";
+import * as path from "path";
 import { UserService } from "../../../../services";
 import { UserProfilePictureValidation } from "../validations/user-profile-picture.validation";
 import responseMessages from "../../../../config/endpoints-response-messages";
 import { errorGenerator } from "../../../error";
+
+const fsRename = promisify(fs.rename);
 
 export const UploadProfilePicturePath = "/upload_photo";
 
@@ -21,13 +27,14 @@ export default class UploadProfilePicture implements IEndpoint<Request, {}> {
   }
   public handler = async (request: IRequest): Promise<HandlerResponse> => {
     this.logger.info(`Accessing path: ${this.path}`);
-    // if (!request.body || !request.body.path) return errorGenerator("Arquivo não encontrado na requisição.", 401, "UploadProfilePicture")
+    const pathSplit = request.body.originalname.split(".");
+    if ( imagesFormatsAllowed.indexOf(pathSplit[pathSplit.length - 1]) === -1 ) {
+      return errorGenerator(errorMessage.formatInvalid, 400, "UploadProfilePicture");
+    }
+    const imageName = `${request.body.id}.${pathSplit[pathSplit.length - 1]}`;
+    const targetPath = `${pathToUpload()}/${imageName}`;
+    await fsRename(request.body.path, targetPath).catch(err => err);
 
-    // const picture = fs.createReadStream(request.body.path);
-
-    // const uploadPictureService = await UserService.updateProfilePicture(request.headers.userid as string, picture);
-    // if (uploadPictureService instanceof Error) { return uploadPictureService; }
-
-    return {data: null, message: responseMessages.uploadProfilePicture};
+    return {data: true, message: responseMessages.uploadProfilePicture};
   }
 }

@@ -46,15 +46,18 @@ export default class UserNew implements IEndpoint<Request, {}> {
       return err;
     });
 
-    const userUpdated = await UserUpdateService({
-      id: userAdded.id,
-      devices: [deviceCreated.data.id],
-      callflow: callflowCreated.data.id
-    }).catch(err => {
-      this.logger.error(`Falha ao atualizar dados de callflow e devices para: ${JSON.stringify(req.body)}`)
-      return err;
-    });
+    let userUpdated = undefined;
+    if ( !(deviceCreated instanceof Error) ) {
+      userUpdated = await UserUpdateService({
+        id: userAdded.id,
+        devices: [deviceCreated.data.id],
+        callflow: callflowCreated.data.id
+      }).catch(err => {
+        this.logger.error(`Falha ao atualizar dados de callflow e devices para: ${JSON.stringify(req.body)}`)
+        return err;
+      });
+    }
 
-    return {data: userUpdated, message: responseMessages.userNew};
+    return {data: userUpdated || userAdded, message: responseMessages.userNew};
   }
 }

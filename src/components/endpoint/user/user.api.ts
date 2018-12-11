@@ -9,7 +9,9 @@ import UserById from "./endpoints/user-by-id";
 import UserUpdatePassword from "./endpoints/user-update-password";
 import UserResetPassword from "./endpoints/user-reset-password";
 import UserUpdate from "./endpoints/user-update";
+import UserByDepartment from "./endpoints/user-by-department";
 import UploadProfilePicture from "./endpoints/user-update-picture";
+import UserByExtension from "./endpoints/user-by-extension";
 
 class UserApi implements IEndpointAPI {
   public path = "/users";
@@ -25,7 +27,9 @@ class UserApi implements IEndpointAPI {
       new UserList(this.logger, this.path),
       new UserUpdatePassword(this.logger, this.path),
       new UserResetPassword(this.logger, this.path),
-      new UserUpdate(this.logger, this.path)
+      new UserUpdate(this.logger, this.path),
+      new UserByDepartment(this.logger, this.path),
+      new UserByExtension(this.logger, this.path)
     ];
   }
 }

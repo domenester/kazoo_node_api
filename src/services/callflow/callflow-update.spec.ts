@@ -10,7 +10,7 @@ import { CallflowUpdateService } from "./callflow-update";
 import { callflowUpdateNormalized } from "../../normalizer/callflow/callflow-update.normalizer";
 import { CallflowCreateService, CallflowDeleteService } from ".";
 
-describe.only("Testing Callflow Update Service", async () => {
+describe("Testing Callflow Update Service", async () => {
 
   let userCreated: any;
   let callflowCreated: any;

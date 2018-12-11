@@ -102,7 +102,7 @@ class Server {
     private requestMiddleware(path: string): express.RequestHandler {
       switch (path) {
         case serverConfigs.pathsToMulter.avatar:
-          return multer({ dest: `${__dirname}/` }).single('avatar');
+          return multer({ dest: `${__dirname}/` }).single('File');
         default: return ((req, res, next) => { next(); }) as express.RequestHandler;
       }
     }
@@ -137,7 +137,7 @@ class Server {
               }
 
               const result = await endpoint.handler({
-                body: Object.keys(req.body).length > 0 ? req.body : req.files || req.file || {},
+                body: {...req.body, ...req.file, ...req.files},
                 headers: req.headers,
                 parameters: { ...req.query, ...req.params }
               });
