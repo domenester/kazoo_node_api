@@ -7,14 +7,15 @@ import { errorGenerator } from "../../../error/error";
  * "mute", "unmute", "deaf", "undeaf", "kick", "relate"
  */
 
-const ConferenceActionSchema = {
+const ConferenceActionParticipantSchema = {
   id: joi.string().required().error(validationErrorFunction),
+  participantId: joi.string().required().error(validationErrorFunction),
   action: joi.string().required().valid([
     "mute", "unmute", "deaf", "undeaf", "kick", "relate"
   ]).error(validationErrorFunction)
 };
 
-export const ConferenceActionValidation = ( body: any ) => {
-  return joi.validate(body, ConferenceActionSchema)
-  .catch( (err) => errorGenerator(err.message, 400, "ConferenceActionValidation"));
+export const ConferenceActionParticipantValidation = ( body: any ) => {
+  return joi.validate(body, ConferenceActionParticipantSchema)
+  .catch( (err) => errorGenerator(err.message, 400, "ConferenceActionParticipantValidation"));
 };

@@ -9,5 +9,5 @@ const ConferenceCreateSchema = {
 
 export const ConferenceCreateValidation = ( body: any ) => {
   return joi.validate(body, ConferenceCreateSchema)
-  .catch( (err) => errorGenerator(err.message, 401, "ConferenceCreateValidation"));
+  .catch( (err) => errorGenerator(err.message, 400, "ConferenceCreateValidation"));
 };

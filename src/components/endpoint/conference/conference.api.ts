@@ -4,6 +4,7 @@ import * as winston from "winston";
 import {IEndpoint, IEndpointAPI} from "../endpoint.interface";
 import ConferenceCreate from "./endpoints/conference-create";
 import ConferenceAction from "./endpoints/conference-action";
+import ConferenceActionParticipant from "./endpoints/conference-action-participant";
 
 class ConferenceApi implements IEndpointAPI {
   public path = "/conferences";
@@ -13,7 +14,8 @@ class ConferenceApi implements IEndpointAPI {
     this.logger = logger;
     this.endpoints = [
       new ConferenceCreate(this.logger, this.path),
-      new ConferenceAction(this.logger, this.path)
+      new ConferenceAction(this.logger, this.path),
+      new ConferenceActionParticipant(this.logger, this.path)
     ];
   }
 }
