@@ -2,31 +2,51 @@
 
 import { expect } from "chai";
 import "mocha";
-import server from "../../server";
 import * as request from "request-promise";
-import { NODE_HOST, NODE_PORT } from "../../config/env";
-import { IUserNew } from "../../interfaces";
-import { ConferenceCreateService } from ".";
-import { ConferenceDeleteService } from "./conference-delete.service";
-import { UserNew } from "../user/user-new.service";
-import { UserDeleteService } from "../user/user-delete.service";
-import { addUserService } from "../../components/endpoint/user/endpoints/user-new.spec";
-import { DeviceDeleteService } from "../device";
-import { CallflowDeleteService } from "..";
-import { deleteUserDevicesCallflows } from "../../components/endpoint/user/endpoints/user-delete.spec";
-import { ConferenceActionService } from "./conference-action.service";
+import {default as logger} from "../../../../components/logger/logger";
+import server from "../../../../server";
+import ConferenceCreate from "./conference-create";
+import ConferenceApi from "../conference.api";
+import responseMessages from "../../../../config/endpoints-response-messages";
+import { IUserNew } from "../../../../interfaces";
+import { NODE_HOST, NODE_PORT } from "../../../../config/env";
+import { UserDeleteService } from "../../../../services/user/user-delete.service";
+import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
+import { CallflowDeleteService } from "../../../../services/callflow/callflow-delete.service";
+import { addUserService } from "../../user/endpoints/user-new.spec";
+import { deleteUserDevicesCallflows } from "../../user/endpoints/user-delete.spec";
 
-describe("Testing Conference Create Service", async () => {
+export const addConferenceService = async (id: string, endpoint: string) => {
+  const conferenceApi = new ConferenceApi(logger);
+  const conferenceCreate = new ConferenceCreate(logger, conferenceApi.path);
 
-  let conferenceCreated: any;
+  let response = await request(
+    `http://${NODE_HOST()}:${NODE_PORT()}${conferenceApi.path}/${id}/${endpoint}`,
+    {
+      method: conferenceCreate.method,
+      headers: { "Content-Type": "application/json" },
+      rejectUnauthorized: false
+    },
+  ).catch(err => err);
+
+  try {
+    return JSON.parse(response);
+  } catch (err) {
+    return response;
+  }
+}
+
+describe("Testing Conference Create", async () => {
+
   let userCreated: any;
   let userInvited: any;
+  let conferenceCreated: any;
 
-  before( async () => {
+  before("Starting server...", async () => {
     await server.start();
   });
 
-  after( () => {
+  after( async () => {
     server.stop();
   });
 
@@ -68,9 +88,9 @@ describe("Testing Conference Create Service", async () => {
     const id = userCreated.id;
     // const endpoint = "anyendpointforconference";
     const endpoint = userInvited.id;
-    const response = await ConferenceCreateService(endpoint, id);
-    expect(response.status).to.be.equal("success");
-    conferenceCreated = response.data.endpoint_responses[0];
+    const response = await addConferenceService(id, endpoint);
+    expect(response.data.status).to.be.equal("success");
+    conferenceCreated = response.data.data.endpoint_responses[0];
   });
 
   it("should remove user, device and callflow added", async () => {

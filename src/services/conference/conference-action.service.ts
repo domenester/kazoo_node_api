@@ -3,9 +3,10 @@ import { errorGenerator, login as errorMessage } from "../../components/error";
 import {default as logger} from "../../components/logger/logger";
 import { AuthApiService } from "../auth-api.service";
 import { conferenceCreateNormalized } from "../../normalizer/conference";
+import { conferenceActionNormalized } from "../../normalizer/conference/conference-action.normalizer";
 
-export const ConferenceCreateService = async (id: string, endpoint: string): Promise<any> => {
-  const path = `${process.env.KAZOO_URL_SERVICES}/conferences/${id}`;
+export const ConferenceActionService = async (id: string, action: string): Promise<any> => {
+  const path = `${process.env.KAZOO_URL_SERVICES}/conferences/${id}/participants`;
   const response = await request(
     path, {
       headers: {
@@ -14,7 +15,7 @@ export const ConferenceCreateService = async (id: string, endpoint: string): Pro
       },
       method: "PUT",
       body: JSON.stringify(
-        conferenceCreateNormalized(id, endpoint)
+        conferenceActionNormalized(action)
       ),
       rejectUnauthorized: false,
     },
@@ -24,7 +25,7 @@ export const ConferenceCreateService = async (id: string, endpoint: string): Pro
     return errorGenerator(
       err,
       err.statusCode,
-      "ConferenceCreateService");
+      "ConferenceActionService");
   });
 
   return response;

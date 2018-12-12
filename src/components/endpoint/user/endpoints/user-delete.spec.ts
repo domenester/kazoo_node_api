@@ -43,7 +43,7 @@ export const deleteUserDevicesCallflows = async (userAdded: any) => {
     await UserDeleteService(userAdded.id).catch(err => reject(err));
     await DeviceDeleteService(userAdded.devices[0]).catch(err => reject(err));
     await CallflowDeleteService(userAdded.callflow).catch(err => reject(err));
-    resolve();
+    resolve(true);
   });
 }
 

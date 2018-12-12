@@ -73,6 +73,20 @@ describe("Testing Conference Create Service", async () => {
     conferenceCreated = response.data.endpoint_responses[0];
   });
 
+  it("should throw trying to make an invalid action", async () => {
+    const response = await ConferenceActionService(
+      conferenceCreated.endpoint_id, "invalidaction"
+    );
+    expect(response.code).to.be.equal(404);
+  });
+
+  it("should create a new conference action", async () => {
+    const response = await ConferenceActionService(
+      conferenceCreated.endpoint_id, "mute"
+    );
+    expect(response.status).to.be.equal("success");
+  });
+
   it("should remove user, device and callflow added", async () => {
     const deleteUserDeviceCallflow = await deleteUserDevicesCallflows(userCreated);
     expect(deleteUserDeviceCallflow).to.be.true;
