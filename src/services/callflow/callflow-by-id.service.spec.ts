@@ -8,6 +8,8 @@ import { IUserNew } from "../../interfaces";
 import { UserNew } from "../user/user-new.service";
 import { CallflowCreateService, CallflowDeleteService } from ".";
 import { UserDeleteService } from "../user/user-delete.service";
+import { createNewUser } from "../user/user-new.service.spec";
+import { createNewCallflow } from "./callflow-create.service.spec";
 
 describe("Testing Callflow By Id Service", async () => {
 
@@ -16,13 +18,6 @@ describe("Testing Callflow By Id Service", async () => {
 
   before( async () => {
     await server.start();
-  });
-
-  after( () => {
-    server.stop();
-  });
-
-  it("should create a user to add callflow", async () => {
     const body: IUserNew = {
       racf: "callflowbyid",
       department: "department",
@@ -30,18 +25,18 @@ describe("Testing Callflow By Id Service", async () => {
       extension: "2222",
       name: "Callflow By Id"
     };
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
+    userCreated = await createNewUser(body);
+    callflowCreated = await createNewCallflow(
+      userCreated.id, userCreated.username, body.extension
+    )
   });
 
-  it("should create a callflow to the user created to get it by id", async () => {
-    const response = await CallflowCreateService(
-      userCreated.id, userCreated.username, "2222"
-    );
-    expect(response.status).to.be.equal("success");
-    callflowCreated = response.data;
+  after( async () => {
+    await Promise.all([
+      UserDeleteService(userCreated.id),
+      CallflowDeleteService(callflowCreated.id)
+    ]).catch(err => err);
+    server.stop();
   });
 
   it("should return a callflow by id", async () => {
@@ -50,14 +45,4 @@ describe("Testing Callflow By Id Service", async () => {
     expect(response.data.id).to.be.equal(callflowCreated.id);
   }).timeout(5000);
 
-  it("should delete the callflow created", async () => {
-    const response = await CallflowDeleteService(callflowCreated.id);
-    expect(response.status).to.be.equal("success");
-  }).timeout(5000);
-
-  it("should delete the user created", async () => {
-    const response = await UserDeleteService(userCreated.id);
-    expect(response.status).to.be.equal("success");
-  });
-
-});
+}).timeout(5000);

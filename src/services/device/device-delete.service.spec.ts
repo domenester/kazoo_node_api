@@ -8,6 +8,8 @@ import { IUserNew } from "../../interfaces";
 import { UserDeleteService } from "../user/user-delete.service";
 import { DeviceCreateService } from "./device-create.service";
 import { DeviceDeleteService } from "./device-delete.service";
+import { createNewUser } from "../user/user-new.service.spec";
+import { createNewDevice } from "./device-create.service.spec";
 
 describe("Testing Device Delete Service", async () => {
 
@@ -16,13 +18,6 @@ describe("Testing Device Delete Service", async () => {
 
   before( async () => {
     await server.start();
-  });
-
-  after( () => {
-    server.stop();
-  });
-
-  it("should create a user to add devices and delete it", async () => {
     const body: IUserNew = {
       racf: "devicedelete",
       department: "department",
@@ -30,18 +25,13 @@ describe("Testing Device Delete Service", async () => {
       extension: "2222",
       name: "Device Delete"
     };
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
+    userCreated = await createNewUser(body);
+    deviceCreated = await createNewDevice(userCreated.id, userCreated.username);
   });
 
-  it("should create a device to the user created", async () => {
-    const response = await DeviceCreateService(
-      userCreated.id, userCreated.username
-    );
-    expect(response.data.owner_id).to.be.equal(userCreated.id);
-    deviceCreated = response.data;
+  after( async () => {
+    await UserDeleteService(userCreated.id);
+    server.stop();
   });
 
   it("should delete the device created", async () => {
@@ -49,8 +39,4 @@ describe("Testing Device Delete Service", async () => {
     expect(response.status).to.be.equal("success");
   });
 
-  it("should delete the user created", async () => {
-    const response = await UserDeleteService(userCreated.id);
-    expect(response.status).to.be.equal("success");
-  });
-});
+}).timeout(5000);

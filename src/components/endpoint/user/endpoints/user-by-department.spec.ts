@@ -40,9 +40,9 @@ describe("Testing User By Department", async () => {
 
     let response = await addUserService(body).catch(err => err);
     
-    userAdded = response.data.data;
-    expect(typeof response.data.data.callflow === "string").to.be.true;
-    expect(response.data.data.devices.length).to.be.equal(1);
+    userAdded = response.data;
+    expect(typeof response.data.callflow === "string").to.be.true;
+    expect(response.data.devices.length).to.be.equal(1);
   }).timeout(10000);
 
   it("should return empty array for department that don't exist", async () => {

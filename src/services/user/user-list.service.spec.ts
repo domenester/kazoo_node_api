@@ -22,6 +22,6 @@ describe("Testing User List Service", async () => {
 
   it("should return all users", async () => {
     const response = await UserListService();
-    expect(response.data).to.be.not.null;
+    expect(response.data.length).to.be.gte(0);
   }).timeout(5000);
 });

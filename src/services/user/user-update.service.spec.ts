@@ -2,13 +2,11 @@
 
 import { expect } from "chai";
 import "mocha";
-import { UserNew } from "./user-new.service";
 import server from "../../server";
-import * as request from "request-promise";
-import { NODE_HOST, NODE_PORT } from "../../config/env";
 import { IUserNew, IUserUpdate } from "../../interfaces";
 import { UserDeleteService } from "./user-delete.service";
 import { UserUpdateService } from "./user-update.service";
+import { createNewUser } from "./user-new.service.spec";
 
 describe("Testing User Update Service", async () => {
 
@@ -16,13 +14,6 @@ describe("Testing User Update Service", async () => {
 
   before( async () => {
     await server.start();
-  });
-
-  after( () => {
-    server.stop();
-  });
-
-  it("should create a new user to update it", async () => {
     const body: IUserNew = {
       racf: "userupdate",
       department: "department",
@@ -30,10 +21,12 @@ describe("Testing User Update Service", async () => {
       extension: "2222",
       name: "User Update"
     };
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
+    userCreated = await createNewUser(body);
+  });
+
+  after( async () => {
+    await UserDeleteService(userCreated.id);
+    server.stop();
   });
 
   it("should update the user's name", async () => {
@@ -88,10 +81,5 @@ describe("Testing User Update Service", async () => {
     };
     const response = await UserUpdateService(body);
     expect(response.data.racf).to.be.not.equal(body.racf);
-  });
-
-  it("should delete the user created", async () => {
-    const response = await UserDeleteService(userCreated.id);
-    expect(response.status).to.be.equal("success");
   });
 });

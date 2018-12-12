@@ -10,6 +10,7 @@ import { UserListService } from "./user-list.service";
 import { UserByIdService } from "./user-by-id.service";
 import { UserByDepartmentService } from "./user-by-department";
 import { UserByExtensionService } from "./user-by-extension";
+import { createNewUser } from "./user-new.service.spec";
 
 describe("Testing User By Extension Service", async () => {
 
@@ -17,24 +18,19 @@ describe("Testing User By Extension Service", async () => {
 
   before( async () => {
     await server.start();
-  });
-
-  after( () => {
-    server.stop();
-  });
-
-  it("should create a new user", async () => {
     const body: IUserNew = {
-      racf: "userbyext",
+      racf: "userbyid",
       department: "department",
-      email: "userbyext@mock.com",
+      email: "userbyid@mock.com",
       extension: "2222",
-      name: "User By Extension"
+      name: "User By Id"
     };
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
+    userCreated = await createNewUser(body);
+  });
+
+  after( async () => {
+    await UserDeleteService(userCreated.id);
+    server.stop();
   });
 
   it("should get nothing for a extension that don't exist", async () => {
@@ -46,10 +42,5 @@ describe("Testing User By Extension Service", async () => {
     const response = await UserByExtensionService("1100");
     expect(response.status).to.be.equal("success");
     expect(response.data.length).to.be.equal(1);
-  });
-
-  it("should delete the user created", async () => {
-    const response = await UserDeleteService(userCreated.id);
-    expect(response.status).to.be.equal("success");
   });
 });

@@ -4,10 +4,13 @@ import { expect } from "chai";
 import "mocha";
 import { UserNew } from "./user-new.service";
 import server from "../../server";
-import * as request from "request-promise";
-import { NODE_HOST, NODE_PORT } from "../../config/env";
 import { IUserNew } from "../../interfaces";
 import { UserDeleteService } from "./user-delete.service";
+
+export const createNewUser = async (body: IUserNew) => {
+  const response = await UserNew(body);
+  return response.data;
+}
 
 describe("Testing User Create Service", async () => {
 
@@ -17,7 +20,8 @@ describe("Testing User Create Service", async () => {
     await server.start();
   });
 
-  after( () => {
+  after( async () => {
+    await UserDeleteService(userCreated.id).catch(err => err);
     server.stop();
   });
 
@@ -30,13 +34,8 @@ describe("Testing User Create Service", async () => {
       name: "User Create"
     };
     const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
-  });
-
-  it("should delete the user created", async () => {
-    const response = await UserDeleteService(userCreated.id);
-    expect(response.status).to.be.equal("success");
+    expect(response.data.email).to.be.equal(body.email);
+    expect(response.data.username).to.be.equal(body.racf);
+    userCreated = response.data;
   });
 });

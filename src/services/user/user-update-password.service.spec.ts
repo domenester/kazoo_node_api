@@ -10,20 +10,14 @@ import { IUserNew, IUserUpdate } from "../../interfaces";
 import { UserDeleteService } from "./user-delete.service";
 import { UserUpdateService } from "./user-update.service";
 import { UserUpdatePasswordService } from "./user-update-password.service";
+import { createNewUser } from "./user-new.service.spec";
 
-describe("Testing User Update Service", async () => {
+describe("Testing User Update Password Service", async () => {
 
   let userCreated: any;
 
   before( async () => {
     await server.start();
-  });
-
-  after( () => {
-    server.stop();
-  });
-
-  it("should create a new user to update it's password", async () => {
     const body: IUserNew = {
       racf: "updatepassword",
       department: "department",
@@ -31,10 +25,12 @@ describe("Testing User Update Service", async () => {
       extension: "2222",
       name: "Update Password"
     };
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
+    userCreated = await createNewUser(body);
+  });
+
+  after( async () => {
+    await UserDeleteService(userCreated.id);
+    server.stop();
   });
 
   it("should patch the user's password", async () => {
@@ -42,8 +38,4 @@ describe("Testing User Update Service", async () => {
     expect(response.status).to.be.equal("success");
   });
 
-  it("should delete the user created", async () => {
-    const response = await UserDeleteService(userCreated.id);
-    expect(response.status).to.be.equal("success");
-  });
 });

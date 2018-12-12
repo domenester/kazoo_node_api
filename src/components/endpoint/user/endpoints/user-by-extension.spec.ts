@@ -56,9 +56,9 @@ describe("Testing User By Extension", async () => {
 
     let response = await addUserService(body).catch(err => err);
     
-    userAdded = response.data.data;
-    expect(typeof response.data.data.callflow === "string").to.be.true;
-    expect(response.data.data.devices.length).to.be.equal(1);
+    userAdded = response.data;
+    expect(typeof userAdded.callflow === "string").to.be.true;
+    expect(userAdded.devices.length).to.be.equal(1);
   }).timeout(10000);
 
   it("should return empty array for extension that don't exist", async () => {

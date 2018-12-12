@@ -11,6 +11,7 @@ import { UserNew } from "./user/user-new.service";
 import { IUserNew } from "../interfaces";
 import { defaultPassword } from "../normalizer/user";
 import { UserDeleteService } from "./user/user-delete.service";
+import { createNewUser } from "./user/user-new.service.spec";
 
 describe("Testing Login Service", async () => {
 
@@ -32,10 +33,7 @@ describe("Testing Login Service", async () => {
       extension: "2222",
       name: "User Login"
     };
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
+    userCreated = await createNewUser(body);
   });
 
   it("should login successfull with the user created", async () => {

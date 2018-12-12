@@ -6,6 +6,7 @@ import { UserNew } from "./user-new.service";
 import server from "../../server";
 import { IUserNew } from "../../interfaces";
 import { UserDeleteService } from "./user-delete.service";
+import { createNewUser } from "./user-new.service.spec";
 
 describe("Testing User Delete Service", async () => {
 
@@ -13,13 +14,6 @@ describe("Testing User Delete Service", async () => {
 
   before( async () => {
     await server.start();
-  });
-
-  after( () => {
-    server.stop();
-  });
-
-  it("should create a user to delete", async () => {
     const body: IUserNew = {
       racf: "userdelete",
       department: "department",
@@ -27,10 +21,11 @@ describe("Testing User Delete Service", async () => {
       extension: "2222",
       name: "User Delete"
     };
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
+    userCreated = await createNewUser(body);
+  });
+
+  after( () => {
+    server.stop();
   });
 
   it("should delete the user created", async () => {

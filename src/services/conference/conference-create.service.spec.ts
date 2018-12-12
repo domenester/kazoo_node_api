@@ -13,7 +13,7 @@ import { UserDeleteService } from "../user/user-delete.service";
 import { addUserService } from "../../components/endpoint/user/endpoints/user-new.spec";
 import { DeviceDeleteService } from "../device";
 import { CallflowDeleteService } from "..";
-import { deleteUserDevicesCallflows } from "../../components/endpoint/user/endpoints/user-delete.spec";
+import { deleteUserByEndpoint } from "../../components/endpoint/user/endpoints/user-delete.spec";
 import { ConferenceActionService } from "./conference-action.service";
 
 describe("Testing Conference Create Service", async () => {
@@ -39,12 +39,8 @@ describe("Testing Conference Create Service", async () => {
       extension: "2222",
       name: "Create Conference"
     };
-
-    let response = await addUserService(body).catch(err => err);
-    
-    userCreated = response.data.data;
-    expect(typeof response.data.data.callflow === "string").to.be.true;
-    expect(response.data.data.devices.length).to.be.equal(1);
+    const response = await addUserService(body).catch(err => err);
+    userCreated = response.data;
   }).timeout(10000);
 
   it("should create a new user to invite to a conf", async () => {
@@ -55,13 +51,9 @@ describe("Testing Conference Create Service", async () => {
       extension: "2223",
       name: "Create Conference Invite"
     };
-
-    let response = await addUserService(body).catch(err => err);
-    
-    userInvited = response.data.data;
-    expect(typeof response.data.data.callflow === "string").to.be.true;
-    expect(response.data.data.devices.length).to.be.equal(1);
-  }).timeout(10000);
+    const response = await addUserService(body).catch(err => err);
+    userInvited = response.data;
+  }).timeout(20000);
 
   it("should create a new conference", async () => {
     // const id = "anyidforconference";
@@ -74,12 +66,12 @@ describe("Testing Conference Create Service", async () => {
   });
 
   it("should remove user, device and callflow added", async () => {
-    const deleteUserDeviceCallflow = await deleteUserDevicesCallflows(userCreated);
+    const deleteUserDeviceCallflow = await deleteUserByEndpoint(userCreated);
     expect(deleteUserDeviceCallflow).to.be.true;
   }).timeout(10000);
 
   it("should remove user, device and callflow added to invite", async () => {
-    const deleteUserDeviceCallflow = await deleteUserDevicesCallflows(userInvited);
+    const deleteUserDeviceCallflow = await deleteUserByEndpoint(userInvited);
     expect(deleteUserDeviceCallflow).to.be.true;
   }).timeout(10000);
 });

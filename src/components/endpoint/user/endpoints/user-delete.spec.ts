@@ -14,6 +14,7 @@ import { UserNew } from "../../../../services/user/user-new.service";
 import { UserDeleteService } from "../../../../services/user/user-delete.service";
 import { DeviceDeleteService } from "../../../../services/device";
 import { CallflowDeleteService } from "../../../../services";
+import { createNewUser } from "../../../../services/user/user-new.service.spec";
 
 export const deleteUserService = async (userId: string) => {
   const env = process.env;
@@ -38,7 +39,7 @@ export const deleteUserService = async (userId: string) => {
   }
 }
 
-export const deleteUserDevicesCallflows = async (userAdded: any) => {
+export const deleteUserByEndpoint = async (userAdded: any) => {
   return new Promise( async (resolve, reject) => {
     await UserDeleteService(userAdded.id).catch(err => reject(err));
     await DeviceDeleteService(userAdded.devices[0]).catch(err => reject(err));
@@ -53,14 +54,6 @@ describe("Testing User Delete", async () => {
 
   before("Starting server...", async () => {
     await server.start();
-  });
-
-  after( async () => {
-    server.stop();
-  });
-
-  it("should create new user to delete it", async () => {
-
     const body: IUserNew = {
       name: "User Delete",
       racf: "userdel",
@@ -68,15 +61,16 @@ describe("Testing User Delete", async () => {
       email: "usertodelete@usertodelete.com",
       department: "Valid department"
     };
+    const userCreated = await createNewUser(body);
+    userIdAdded = userCreated.id;
+  });
 
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userIdAdded = response.id;
+  after( async () => {
+    server.stop();
   });
 
   it("should delete the user created to delete", async () => {
     let response = await deleteUserService(userIdAdded);
     expect(response.data.status).to.be.eq("success");
   });
-});
+}).timeout(10000);

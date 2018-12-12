@@ -16,6 +16,7 @@ import { UserNew } from "../../../../services/user/user-new.service";
 import { UserDeleteService } from "../../../../services/user/user-delete.service";
 import UserResetPassword from "./user-reset-password";
 import { defaultPassword } from "../../../../normalizer/user";
+import { createNewUser } from "../../../../services/user/user-new.service.spec";
 
 describe("Testing User Reset Password", async () => {
 
@@ -37,10 +38,7 @@ describe("Testing User Reset Password", async () => {
       extension: "2222",
       name: "Reset Password"
     };
-    const response = await UserNew(body);
-    expect(response.email).to.be.equal(body.email);
-    expect(response.username).to.be.equal(body.racf);
-    userCreated = response;
+    userCreated = await createNewUser(body);
   });
 
   it("should update user and devices password", async () => {

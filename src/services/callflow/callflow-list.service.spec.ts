@@ -7,9 +7,6 @@ import { CallflowListService } from "./callflow-list.service";
 
 describe("Testing Callflow List Service", async () => {
 
-  let userCreated: any;
-  let callflowCreated: any;
-
   before( async () => {
     await server.start();
   });
@@ -21,5 +18,6 @@ describe("Testing Callflow List Service", async () => {
   it("should return all callflows", async () => {
     const response = await CallflowListService();
     expect(response.status).to.be.equal("success");
+    expect(response.data.length).to.be.gte(0);
   });
 });

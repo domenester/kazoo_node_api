@@ -14,6 +14,11 @@ import { UserDeleteService } from "../../../../services/user/user-delete.service
 import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
 import { CallflowDeleteService } from "../../../../services/callflow/callflow-delete.service";
 
+export const createNewUserByEndpoint = async (body: IUserNew) => {
+  let response = await addUserService(body).catch(err => err);
+  return response.data.data;
+}
+
 export const addUserService = async (body: any) => {
   const userApi = new UserApi(logger);
   const userNew = new UserNew(logger, userApi.path);
@@ -29,7 +34,7 @@ export const addUserService = async (body: any) => {
   ).catch(err => JSON.parse(err.error));
 
   try {
-    return JSON.parse(response);
+    return JSON.parse(response).data;
   } catch (err) {
     return response;
   }
@@ -134,9 +139,9 @@ describe("Testing User New", async () => {
 
     let response = await addUserService(body).catch(err => err);
     
-    userAdded = response.data.data;
-    expect(typeof response.data.data.callflow === "string").to.be.true;
-    expect(response.data.data.devices.length).to.be.equal(1);
+    userAdded = response.data;
+    expect(typeof response.data.callflow === "string").to.be.true;
+    expect(response.data.devices.length).to.be.equal(1);
   }).timeout(10000);
 
   it("should remove user, device and callflow added", async () => {

@@ -24,23 +24,24 @@ export default class UserNew implements IEndpoint<Request, {}> {
     const validation = await UserNewValidation(req.body);
     if (validation instanceof Error) { return validation; }
 
-    const userAdded = await UserService.add(
+    let userAdded = await UserService.add(
       req.body
     ).catch(err => {
       this.logger.error(`Falha ao inserir usuário: ${JSON.stringify(req.body)}`)
       return err;
     });
+    
     if (userAdded instanceof Error) { return userAdded; }
 
     const deviceCreated = await DeviceCreateService(
-      userAdded.id, req.body.racf
+      userAdded.data.id, req.body.racf
     ).catch(err => {
       this.logger.error(`Falha ao inserir device para: ${JSON.stringify(req.body)}`)
       return err;
     });
 
     const callflowCreated = await CallflowCreateService(
-      userAdded.id, req.body.racf, req.body.extension
+      userAdded.data.id, req.body.racf, req.body.extension
     ).catch(err => {
       this.logger.error(`Falha ao inserir callflow para: ${JSON.stringify(req.body)}`)
       return err;
@@ -49,7 +50,7 @@ export default class UserNew implements IEndpoint<Request, {}> {
     let userUpdated = undefined;
     if ( !(deviceCreated instanceof Error) ) {
       userUpdated = await UserUpdateService({
-        id: userAdded.id,
+        id: userAdded.data.id,
         devices: [deviceCreated.data.id],
         callflow: callflowCreated.data.id
       }).catch(err => {
