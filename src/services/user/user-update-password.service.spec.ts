@@ -11,6 +11,7 @@ import { UserDeleteService } from "./user-delete.service";
 import { UserUpdateService } from "./user-update.service";
 import { UserUpdatePasswordService } from "./user-update-password.service";
 import { createNewUser } from "./user-new.service.spec";
+import { userMock } from "./mocks";
 
 describe("Testing User Update Password Service", async () => {
 
@@ -18,13 +19,7 @@ describe("Testing User Update Password Service", async () => {
 
   before( async () => {
     await server.start();
-    const body: IUserNew = {
-      racf: "updatepassword",
-      department: "department",
-      email: "updatepassword@mock.com",
-      extension: "2222",
-      name: "Update Password"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
   });
 

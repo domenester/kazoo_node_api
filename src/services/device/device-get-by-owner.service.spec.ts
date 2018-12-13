@@ -13,6 +13,7 @@ import { DeviceDeleteService } from "./device-delete.service";
 import { DeviceGetByOwnerService } from "./device-get-by-owner.service";
 import { createNewUser } from "../user/user-new.service.spec";
 import { createNewDevice } from "./device-create.service.spec";
+import { userMock } from "../user/mocks";
 
 describe("Testing Device Get By Owner Service", async () => {
 
@@ -21,13 +22,7 @@ describe("Testing Device Get By Owner Service", async () => {
 
   before( async () => {
     await server.start();
-    const body: IUserNew = {
-      racf: "devicegetbyowner",
-      department: "department",
-      email: "devicegetbyowner@mock.com",
-      extension: "2222",
-      name: "Device Get By Owner"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
     deviceCreated = await createNewDevice(userCreated.id, userCreated.username);
   });

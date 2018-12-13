@@ -15,6 +15,20 @@ import { UserDeleteService } from "../../../../services/user/user-delete.service
 import { addUserService } from "./user-new.spec";
 import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
 import { CallflowDeleteService } from "../../../../services";
+import { userMock } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
+import { deleteUserByEndpoint } from "./user-delete.spec";
+
+
+export const userByIdByEndpoint = async (location: string) => {
+  const userApi = new UserApi(logger);
+  const userById = new UserById(logger, userApi.path);
+  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/${location}`);
+  const response = await serviceTestApiInstance.request(
+    userById.method, {}, {}, "Testing User By Id"
+  );
+  return response;
+}
 
 describe("Testing User By Id", async () => {
 
@@ -30,13 +44,7 @@ describe("Testing User By Id", async () => {
 
   it("should add new user to get it by id", async () => {
 
-    const body: IUserNew = {
-      name: "User by Id",
-      racf: "userbyid",
-      extension: "12345",
-      email: "userbyid@valid.com",
-      department: "department",
-    };
+    const body: IUserNew = userMock;
 
     let response = await addUserService(body).catch(err => err);
     
@@ -46,26 +54,13 @@ describe("Testing User By Id", async () => {
   }).timeout(10000);
 
   it("should return the user created by id", async () => {
-    const userApi = new UserApi(logger);
-    const userById = new UserById(logger, userApi.path);
-
-    let response = await request(
-      `http://${NODE_HOST()}:${NODE_PORT()}${userApi.path}/${userAdded.id}`,
-      { method: userById.method },
-    );
-    response = JSON.parse(response);
-    expect(response.data.id).to.be.equal(userAdded.id);
+    const response = await userByIdByEndpoint(userAdded.id);
+    expect(response.id).to.be.equal(userAdded.id);
   }).timeout(4000);
 
   it("should remove user, device and callflow added", async () => {
-    const userResponse = await UserDeleteService(userAdded.id);
-    expect(userResponse.status).to.be.equal("success");
-
-    const deviceResponse = await DeviceDeleteService(userAdded.devices[0]);
-    expect(deviceResponse.status).to.be.equal("success");
-
-    const callflowResponse = await CallflowDeleteService(userAdded.callflow);
-    expect(callflowResponse.status).to.be.equal("success");
+    const response = await deleteUserByEndpoint(userAdded);
+    expect(response).to.be.true;
   }).timeout(10000);
   
 });

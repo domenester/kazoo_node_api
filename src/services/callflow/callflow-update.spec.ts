@@ -11,6 +11,7 @@ import { callflowUpdateNormalized } from "../../normalizer/callflow/callflow-upd
 import { CallflowCreateService, CallflowDeleteService } from ".";
 import { createNewUser } from "../user/user-new.service.spec";
 import { createNewCallflow } from "./callflow-create.service.spec";
+import { userMock } from "../user/mocks";
 
 describe("Testing Callflow Update Service", async () => {
 
@@ -19,13 +20,7 @@ describe("Testing Callflow Update Service", async () => {
 
   before( async () => {
     await server.start();
-    const body: IUserNew = {
-      racf: "callflowupdate",
-      department: "department",
-      email: "callflowupdate@mock.com",
-      extension: "2222",
-      name: "Callflow Update"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
     callflowCreated = await createNewCallflow(
       userCreated.id, userCreated.username, body.extension

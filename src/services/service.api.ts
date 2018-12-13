@@ -24,7 +24,8 @@ class ServiceApi {
     }
   };
 
-  constructor(location: string) {
+  constructor(location: string, path?: string) {
+    if (path) { this.path = path; }
     this.fullPath = `${this.path}${location}`;
   }
 
@@ -45,6 +46,6 @@ class ServiceApi {
   }
 };
 
-export const serviceApi = (location: string) => {
-  return new ServiceApi(location);
+export const serviceApi = (location: string, path?: string) => {
+  return new ServiceApi(location, path);
 }

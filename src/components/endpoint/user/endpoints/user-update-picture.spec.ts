@@ -17,6 +17,7 @@ import { UserDeleteService } from "../../../../services/user/user-delete.service
 import { DeviceDeleteService } from "../../../../services/device";
 import { CallflowDeleteService } from "../../../../services";
 import * as fs from "fs";
+import { userMock } from "../../../../services/user/mocks";
 
 describe("Testing User Picture Update", async () => {
 
@@ -31,13 +32,7 @@ describe("Testing User Picture Update", async () => {
 
   it("should add new user", async () => {
 
-    const body: IUserNew = {
-      name: "Valid Name",
-      racf: "useradd",
-      extension: "12345",
-      email: "validemail@valid.com",
-      department: "Valid department",
-    };
+    const body: IUserNew = userMock;
 
     let response = await addUserService(body).catch(err => err);
     

@@ -10,6 +10,7 @@ import { CallflowCreateService } from "./callflow-create.service";
 import { CallflowDeleteService } from "./callflow-delete.service";
 import { createNewUser } from "../user/user-new.service.spec";
 import { createNewCallflow } from "./callflow-create.service.spec";
+import { userMock } from "../user/mocks";
 
 describe("Testing Callflow Delete Service", async () => {
 
@@ -18,13 +19,7 @@ describe("Testing Callflow Delete Service", async () => {
 
   before( async () => {
     await server.start();
-    const body: IUserNew = {
-      racf: "callflowdelete",
-      department: "department",
-      email: "callflowdelete@mock.com",
-      extension: "2222",
-      name: "Callflow Delete"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
     callflowCreated = await createNewCallflow(
       userCreated.id, userCreated.username, body.extension

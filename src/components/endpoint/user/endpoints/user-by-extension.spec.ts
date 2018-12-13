@@ -15,6 +15,7 @@ import { addUserService } from "./user-new.spec";
 import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
 import { CallflowDeleteService } from "../../../../services";
 import UserByExtension from "./user-by-extension";
+import { userMock } from "../../../../services/user/mocks";
 
 export const getUserByExtensionService = async (extension: string) => {
   const userApi = new UserApi(logger);
@@ -46,13 +47,7 @@ describe("Testing User By Extension", async () => {
 
   it("should add new user to get it by department", async () => {
 
-    const body: IUserNew = {
-      name: "User by Extension",
-      racf: "userbyext",
-      extension: "12345",
-      email: "userbyext@valid.com",
-      department: "department",
-    };
+    const body: IUserNew = userMock;
 
     let response = await addUserService(body).catch(err => err);
     
@@ -67,7 +62,7 @@ describe("Testing User By Extension", async () => {
   }).timeout(4000);
 
   it("should return the user created by extension", async () => {
-    const response = await getUserByExtensionService("12345");
+    const response = await getUserByExtensionService(userMock.extension);
     expect(response.data.data.id).to.be.equal(userAdded.id);
   }).timeout(4000);
 

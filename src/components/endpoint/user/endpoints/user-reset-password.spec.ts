@@ -17,6 +17,7 @@ import { UserDeleteService } from "../../../../services/user/user-delete.service
 import UserResetPassword from "./user-reset-password";
 import { defaultPassword } from "../../../../normalizer/user";
 import { createNewUser } from "../../../../services/user/user-new.service.spec";
+import { userMock } from "../../../../services/user/mocks";
 
 describe("Testing User Reset Password", async () => {
 
@@ -31,13 +32,7 @@ describe("Testing User Reset Password", async () => {
   });
 
   it("should create a new user to update it", async () => {
-    const body: IUserNew = {
-      racf: "resetpassword",
-      department: "department",
-      email: "resetpassword@mock.com",
-      extension: "2222",
-      name: "Reset Password"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
   });
 

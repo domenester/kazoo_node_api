@@ -15,6 +15,7 @@ import { DeviceDeleteService } from "../../../../services/device/device-delete.s
 import { CallflowDeleteService } from "../../../../services/callflow/callflow-delete.service";
 import { UserService } from "../../../../services";
 import { addUserService } from "./user-new.spec";
+import { userMock } from "../../../../services/user/mocks";
 
 export const updateUserService = async (body: IUserUpdate) => {
   const userApi = new UserApi(logger);
@@ -51,13 +52,7 @@ describe("Testing User Update", async () => {
 
   it("should add new user to update it", async () => {
 
-    const body: IUserNew = {
-      name: "Valid Name",
-      racf: "useradd",
-      extension: "12345",
-      email: "validemail@valid.com",
-      department: "Valid department",
-    };
+    const body: IUserNew = userMock;
 
     let response = await addUserService(body).catch(err => err);
     
@@ -72,7 +67,7 @@ describe("Testing User Update", async () => {
       id: userAdded.id,
       name: "User Update Changed",
       racf: "userchange",
-      extension: "2222",
+      extension: "9998",
       email: "userupdatechanged@valid.com",
       department: "department changed",
     };

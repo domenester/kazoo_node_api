@@ -15,6 +15,7 @@ import { UserDeleteService } from "../../../../services/user/user-delete.service
 import { DeviceDeleteService } from "../../../../services/device";
 import { CallflowDeleteService } from "../../../../services";
 import { createNewUser } from "../../../../services/user/user-new.service.spec";
+import { userMock } from "../../../../services/user/mocks";
 
 export const deleteUserService = async (userId: string) => {
   const env = process.env;
@@ -54,13 +55,7 @@ describe("Testing User Delete", async () => {
 
   before("Starting server...", async () => {
     await server.start();
-    const body: IUserNew = {
-      name: "User Delete",
-      racf: "userdel",
-      extension: "12345",
-      email: "usertodelete@usertodelete.com",
-      department: "Valid department"
-    };
+    const body: IUserNew = userMock;
     const userCreated = await createNewUser(body);
     userIdAdded = userCreated.id;
   });

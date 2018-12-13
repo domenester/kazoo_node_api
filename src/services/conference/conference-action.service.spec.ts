@@ -15,6 +15,7 @@ import { DeviceDeleteService } from "../device";
 import { CallflowDeleteService } from "..";
 import { deleteUserByEndpoint } from "../../components/endpoint/user/endpoints/user-delete.spec";
 import { ConferenceActionService } from "./conference-action.service";
+import { userMock, userMock2 } from "../user/mocks";
 
 describe("Testing Conference Action Service", async () => {
 
@@ -32,25 +33,13 @@ describe("Testing Conference Action Service", async () => {
 
   it("should create a new user owner of a conference", async () => {
 
-    const body: IUserNew = {
-      racf: "createconf",
-      department: "department",
-      email: "createconf@mock.com",
-      extension: "2222",
-      name: "Create Conference"
-    };
+    const body: IUserNew = userMock;
     const response = await addUserService(body).catch(err => err);
     userCreated = response.data;
   }).timeout(10000);
 
   it("should create a new user to invite to a conf", async () => {
-    const body: IUserNew = {
-      racf: "confinvite",
-      department: "department",
-      email: "confinvite@mock.com",
-      extension: "2223",
-      name: "Create Conference Invite"
-    };
+    const body: IUserNew = userMock2;
     const response = await addUserService(body).catch(err => err);
     userInvited = response.data;
   }).timeout(10000);

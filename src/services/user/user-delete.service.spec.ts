@@ -7,6 +7,7 @@ import server from "../../server";
 import { IUserNew } from "../../interfaces";
 import { UserDeleteService } from "./user-delete.service";
 import { createNewUser } from "./user-new.service.spec";
+import { userMock } from "./mocks";
 
 describe("Testing User Delete Service", async () => {
 
@@ -14,13 +15,7 @@ describe("Testing User Delete Service", async () => {
 
   before( async () => {
     await server.start();
-    const body: IUserNew = {
-      racf: "userdelete",
-      department: "department",
-      email: "userdelete@mock.com",
-      extension: "2222",
-      name: "User Delete"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
   });
 

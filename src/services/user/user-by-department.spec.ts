@@ -10,6 +10,7 @@ import { UserListService } from "./user-list.service";
 import { UserByIdService } from "./user-by-id.service";
 import { UserByDepartmentService } from "./user-by-department";
 import { createNewUser } from "./user-new.service.spec";
+import { userMock } from "./mocks";
 
 describe("Testing User By Department Service", async () => {
 
@@ -17,13 +18,7 @@ describe("Testing User By Department Service", async () => {
 
   before( async () => {
     await server.start();
-    const body: IUserNew = {
-      racf: "userbydep",
-      department: "department",
-      email: "userbydep@mock.com",
-      extension: "2222",
-      name: "User By Department"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
   });
 

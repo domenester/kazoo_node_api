@@ -13,6 +13,7 @@ import { NODE_HOST, NODE_PORT } from "../../../../config/env";
 import { UserDeleteService } from "../../../../services/user/user-delete.service";
 import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
 import { CallflowDeleteService } from "../../../../services/callflow/callflow-delete.service";
+import { serviceTestApi, ServiceTestApi } from "../../../../services/service-test.api";
 
 export const createNewUserByEndpoint = async (body: IUserNew) => {
   let response = await addUserService(body).catch(err => err);
@@ -22,22 +23,11 @@ export const createNewUserByEndpoint = async (body: IUserNew) => {
 export const addUserService = async (body: any) => {
   const userApi = new UserApi(logger);
   const userNew = new UserNew(logger, userApi.path);
-
-  let response = await request(
-    `http://${NODE_HOST()}:${NODE_PORT()}${userNew.fullPath}`,
-    {
-      method: userNew.method,
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-      rejectUnauthorized: false
-    },
-  ).catch(err => JSON.parse(err.error));
-
-  try {
-    return JSON.parse(response).data;
-  } catch (err) {
-    return response;
-  }
+  const serviceTestApiInstance = new ServiceTestApi(userNew.fullPath);
+  const response = await serviceTestApiInstance.request(
+    userNew.method, body, {}, "Testing User New"
+  );
+  return response;
 }
 
 describe("Testing User New", async () => {

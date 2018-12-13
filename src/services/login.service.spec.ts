@@ -12,6 +12,7 @@ import { IUserNew } from "../interfaces";
 import { defaultPassword } from "../normalizer/user";
 import { UserDeleteService } from "./user/user-delete.service";
 import { createNewUser } from "./user/user-new.service.spec";
+import { userMock } from "./user/mocks";
 
 describe("Testing Login Service", async () => {
 
@@ -26,19 +27,13 @@ describe("Testing Login Service", async () => {
   });
 
   it("should create a new user to loggin", async () => {
-    const body: IUserNew = {
-      racf: "userlogin",
-      department: "department",
-      email: "userlogin@mock.com",
-      extension: "2222",
-      name: "User Login"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
   });
 
   it("should login successfull with the user created", async () => {
     const body = {
-      username: "userlogin",
+      username: userMock.racf,
       password: defaultPassword
     }
     const response = await LoginService(body);

@@ -40,12 +40,16 @@ export default class UserNew implements IEndpoint<Request, {}> {
       return err;
     });
 
+    if (deviceCreated instanceof Error) { return deviceCreated; }
+
     const callflowCreated = await CallflowCreateService(
       userAdded.data.id, req.body.racf, req.body.extension
     ).catch(err => {
       this.logger.error(`Falha ao inserir callflow para: ${JSON.stringify(req.body)}`)
       return err;
     });
+
+    if (callflowCreated instanceof Error) { return callflowCreated; }
 
     let userUpdated = undefined;
     if ( !(deviceCreated instanceof Error) ) {
@@ -57,6 +61,7 @@ export default class UserNew implements IEndpoint<Request, {}> {
         this.logger.error(`Falha ao atualizar dados de callflow e devices para: ${JSON.stringify(req.body)}`)
         return err;
       });
+      if (userUpdated instanceof Error) { return userUpdated; }
     }
 
     return {data: userUpdated || userAdded, message: responseMessages.userNew};

@@ -9,6 +9,7 @@ import { UserDeleteService } from "../user/user-delete.service";
 import { DeviceCreateService } from "./device-create.service";
 import { DeviceDeleteService } from "./device-delete.service";
 import { createNewUser } from "../user/user-new.service.spec";
+import { userMock } from "../user/mocks";
 
 export const createNewDevice = async (userId: string, username: string) => {
   const response = await DeviceCreateService( userId, username );
@@ -22,13 +23,7 @@ describe("Testing Device Create Service", async () => {
 
   before( async () => {
     await server.start();
-    const body: IUserNew = {
-      racf: "devicecreate",
-      department: "department",
-      email: "devicecreate@mock.com",
-      extension: "2222",
-      name: "Device Create"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
   });
 

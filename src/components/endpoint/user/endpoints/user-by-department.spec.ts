@@ -15,6 +15,7 @@ import { addUserService } from "./user-new.spec";
 import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
 import { CallflowDeleteService } from "../../../../services";
 import UserByDepartment from "./user-by-department";
+import { userMock } from "../../../../services/user/mocks";
 
 describe("Testing User By Department", async () => {
 
@@ -30,13 +31,7 @@ describe("Testing User By Department", async () => {
 
   it("should add new user to get it by department", async () => {
 
-    const body: IUserNew = {
-      name: "User by Department",
-      racf: "userbydep",
-      extension: "12345",
-      email: "userbydep@valid.com",
-      department: "department",
-    };
+    const body: IUserNew = userMock;
 
     let response = await addUserService(body).catch(err => err);
     

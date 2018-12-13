@@ -17,6 +17,7 @@ import { UserDeleteService } from "../../../../services/user/user-delete.service
 import UserUpdatePassword from "./user-update-password";
 import { defaultPassword } from "../../../../normalizer/user";
 import { createNewUser } from "../../../../services/user/user-new.service.spec";
+import { userMock } from "../../../../services/user/mocks";
 
 describe("Testing User Update Password", async () => {
 
@@ -31,13 +32,7 @@ describe("Testing User Update Password", async () => {
   });
 
   it("should create a new user to update it", async () => {
-    const body: IUserNew = {
-      racf: "updatepassword",
-      department: "department",
-      email: "updatepassword@mock.com",
-      extension: "2222",
-      name: "Update Password"
-    };
+    const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
   });
 
@@ -46,7 +41,7 @@ describe("Testing User Update Password", async () => {
     const userUpdatePassword = new UserUpdatePassword(logger, userApi.path);
     const body = {
       id: userCreated.id,
-      username: "updatepassword",
+      username: userCreated.username,
       password: defaultPassword,
       newPassword: "anypassword"
     }
