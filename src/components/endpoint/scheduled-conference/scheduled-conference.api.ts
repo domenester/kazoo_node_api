@@ -3,6 +3,10 @@ import {Request} from "express-serve-static-core";
 import * as winston from "winston";
 import {IEndpoint, IEndpointAPI} from "../endpoint.interface";
 import ScheduledConferenceCreate from "./endpoints/scheduled-conference-create";
+import ScheduledConferenceList from "./endpoints/scheduled-conference-list";
+import ScheduledConferenceById from "./endpoints/scheduled-conference-by-id";
+import ScheduledConferenceByUser from "./endpoints/scheduled-conference-by-user";
+import ScheduledConferenceDelete from "./endpoints/scheduled-conference-delete";
 
 class ScheduledConferenceApi implements IEndpointAPI {
   public path = "/scheduled_conferences";
@@ -12,6 +16,10 @@ class ScheduledConferenceApi implements IEndpointAPI {
     this.logger = logger;
     this.endpoints = [
       new ScheduledConferenceCreate(this.logger, this.path),
+      new ScheduledConferenceList(this.logger, this.path),
+      new ScheduledConferenceById(this.logger, this.path),
+      new ScheduledConferenceByUser(this.logger, this.path),
+      new ScheduledConferenceDelete(this.logger, this.path)
     ];
   }
 }
