@@ -7,6 +7,7 @@ import { usersWithExtension } from "../../../../utils/users-with-extension";
 import { UserByIdService } from "../../../../services/user/user-by-id.service";
 import { UserByIdValidation } from "../validations/user-by-id.validation";
 import { CallflowByIdService } from "../../../../services/callflow/callflow-by-id.service";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserById implements IEndpoint<Request, {}> {
   public path = "/:id";
@@ -29,6 +30,6 @@ export default class UserById implements IEndpoint<Request, {}> {
     let user = userById.data;
     user["extension"] = callflowById.data["numbers"][1];
 
-    return {data: user, message: responseMessages.userList};
+    return endpointResponseNormalizer(user);
   }
 }

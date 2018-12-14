@@ -18,6 +18,17 @@ import UserUpdatePassword from "./user-update-password";
 import { defaultPassword } from "../../../../normalizer/user";
 import { createNewUser } from "../../../../services/user/user-new.service.spec";
 import { userMock } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
+
+export const resetPasswordByEndpoint = async (userId: string, body: any) => {
+  const userApi = new UserApi(logger);
+  const userUpdatePassword = new UserUpdatePassword(logger, userApi.path);
+  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/update_password/${userId}`);
+  const response = await serviceTestApiInstance.request(
+    userUpdatePassword.method, body, {}, "Testing User Update Password"
+  );
+  return response;
+}
 
 describe("Testing User Update Password", async () => {
 
@@ -45,17 +56,7 @@ describe("Testing User Update Password", async () => {
       password: defaultPassword,
       newPassword: "anypassword"
     }
-
-    let response = await request(
-      `http://${NODE_HOST()}:${NODE_PORT()}${userApi.path}/update_password/${userCreated.id}`,
-      {
-        method: userUpdatePassword.method,
-        body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
-        rejectUnauthorized: false
-      }
-    );
-    response = JSON.parse(response);
+    let response = await resetPasswordByEndpoint(userCreated.id, body);
     expect(response.data).to.be.true;
   }).timeout(4000);
 

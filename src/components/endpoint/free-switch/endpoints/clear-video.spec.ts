@@ -9,25 +9,16 @@ import ClearVideo from "./clear-video";
 import { userPasswordDefault, usernameDefault } from "../../../../mocks";
 import { NODE_HOST, NODE_PORT } from "../../../../config/env";
 import FreeSwitchApi from "../free-switch.api";
+import { ServiceTestApi } from "../../../../services/service-test.api";
 
-const clearVideoEndpoint = async () => {
+export const clearVideoEndpoint = async () => {
   const freeSwitchApi = new FreeSwitchApi(logger);
   const clearVideo = new ClearVideo(logger);
-
-  let response = await request(
-    `http://${NODE_HOST()}:${NODE_PORT()}${freeSwitchApi.path}/conferenceId/clearvideo`,
-    {
-      headers: { "Content-Type": "application/json" },
-      method: clearVideo.method,
-      rejectUnauthorized: false,
-    }
-  ).catch(err => err);
-
-  try {
-    return JSON.parse(response);
-  } catch (err) {
-    return response;
-  }
+  const serviceTestApiInstance = new ServiceTestApi(`${freeSwitchApi.path}/conferenceId/clearvideo`);
+  const response = await serviceTestApiInstance.request(
+    clearVideo.method, {}, {}, "Testing Clear Video"
+  );
+  return response;
 }
 
 describe("Testing Clear Video", async () => {
@@ -42,6 +33,6 @@ describe("Testing Clear Video", async () => {
 
   it("should call clear video endpoint", async () => {
     const response = await clearVideoEndpoint();
-    expect(response.data).to.not.be.null;
+    expect(response).to.not.be.null;
   });
 });

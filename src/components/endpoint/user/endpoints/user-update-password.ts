@@ -8,6 +8,7 @@ import { errorGenerator } from "../../../error";
 import { login as errorMessage } from "../../../../components/error/error-messages";
 import { DeviceGetByOwnerService, DeviceUpdateService } from "../../../../services/device";
 import { deviceUpdatePasswordNormalized } from "../../../../normalizer/device/device-update-password.normalizer";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserUpdatePassword implements IEndpoint<Request, {}> {
   public path = "/update_password/:id";
@@ -54,6 +55,6 @@ export default class UserUpdatePassword implements IEndpoint<Request, {}> {
       });
     });
 
-    return {data: true, message: responseMessages.userUpdate};
+    return endpointResponseNormalizer({ data: true}, responseMessages.resetPassword);
   }
 }

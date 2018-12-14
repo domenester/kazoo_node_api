@@ -4,6 +4,7 @@ import {IEndpoint, IRequest, Verb, HandlerResponse} from "../../../endpoint/endp
 import { UserService, CallflowListService } from "../../../../services";
 import responseMessages from "../../../../config/endpoints-response-messages";
 import { usersWithExtension } from "../../../../utils/users-with-extension";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserList implements IEndpoint<Request, {}> {
   public path = "";
@@ -28,6 +29,6 @@ export default class UserList implements IEndpoint<Request, {}> {
 
     const users = usersWithExtension(usersList, callflowsList);
 
-    return {data: users, message: responseMessages.userList};
+    return endpointResponseNormalizer(users, responseMessages.userList);
   }
 }

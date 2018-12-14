@@ -2,6 +2,7 @@ import {Request} from "express-serve-static-core";
 import * as winston from "winston";
 import {IEndpoint, IRequest, Verb} from "../../endpoint.interface";
 import { ScheduledConfCreateService } from "../../../../services";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class ScheduledConferenceCreate implements IEndpoint<Request, {}> {
   public path = "";
@@ -23,6 +24,6 @@ export default class ScheduledConferenceCreate implements IEndpoint<Request, {}>
     const response = await ScheduledConfCreateService(req.body);
     if (response instanceof Error) { return response; }
 
-    return {data: response};
+    return endpointResponseNormalizer(response);
   }
 }

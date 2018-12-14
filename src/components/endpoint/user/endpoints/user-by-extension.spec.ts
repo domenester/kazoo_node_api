@@ -16,21 +16,16 @@ import { DeviceDeleteService } from "../../../../services/device/device-delete.s
 import { CallflowDeleteService } from "../../../../services";
 import UserByExtension from "./user-by-extension";
 import { userMock } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
 
 export const getUserByExtensionService = async (extension: string) => {
   const userApi = new UserApi(logger);
   const userByExtension = new UserByExtension(logger, userApi.path);
-
-  let response = await request(
-    `http://${NODE_HOST()}:${NODE_PORT()}${userApi.path}/extension/${extension}`,
-    { method: userByExtension.method },
-  ).catch(err => JSON.parse(err.error));
-  
-  try {
-    return JSON.parse(response);
-  } catch (err) {
-    return response;
-  }
+  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/extension/${extension}`);
+  const response = await serviceTestApiInstance.request(
+    userByExtension.method, {}, {}, "Testing User By Extension"
+  );
+  return response;
 }
 
 describe("Testing User By Extension", async () => {
@@ -63,7 +58,7 @@ describe("Testing User By Extension", async () => {
 
   it("should return the user created by extension", async () => {
     const response = await getUserByExtensionService(userMock.extension);
-    expect(response.data.data.id).to.be.equal(userAdded.id);
+    expect(response.data.id).to.be.equal(userAdded.id);
   }).timeout(4000);
 
   it("should remove user, device and callflow added", async () => {

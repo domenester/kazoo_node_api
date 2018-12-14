@@ -9,6 +9,7 @@ import { errorGenerator } from "../../../error/error";
 import { user as errorMessage } from "../../../error/error-messages";
 import { UserByIdService } from "../../../../services/user/user-by-id.service";
 import { UserByExtensionService } from "../../../../services/user/user-by-extension";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserByExtension implements IEndpoint<Request, {}> {
   public path = "/extension/:extension";
@@ -37,6 +38,6 @@ export default class UserByExtension implements IEndpoint<Request, {}> {
     let user = userById.data;
     user["extension"] = callflowById.data["numbers"][1];
 
-    return {data: userById, message: responseMessages.userList};
+    return endpointResponseNormalizer(userById, responseMessages.userList);
   }
 }

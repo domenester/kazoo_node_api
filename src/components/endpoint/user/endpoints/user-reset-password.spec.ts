@@ -18,6 +18,17 @@ import UserResetPassword from "./user-reset-password";
 import { defaultPassword } from "../../../../normalizer/user";
 import { createNewUser } from "../../../../services/user/user-new.service.spec";
 import { userMock } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
+
+export const resetPasswordByEndpoint = async (body: any) => {
+  const userApi = new UserApi(logger);
+  const userResetPassword = new UserResetPassword(logger, userApi.path);
+  const serviceTestApiInstance = new ServiceTestApi(userResetPassword.fullPath);
+  const response = await serviceTestApiInstance.request(
+    userResetPassword.method, body, {}, "Testing User Reset Password"
+  );
+  return response;
+}
 
 describe("Testing User Reset Password", async () => {
 
@@ -43,17 +54,7 @@ describe("Testing User Reset Password", async () => {
       email: userCreated.email,
       newPassword: "anypassword"
     }
-
-    let response = await request(
-      `http://${NODE_HOST()}:${NODE_PORT()}${userResetPassword.fullPath}`,
-      {
-        method: userResetPassword.method,
-        body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
-        rejectUnauthorized: false
-      }
-    );
-    response = JSON.parse(response);
+    let response = await resetPasswordByEndpoint(body);
     expect(response.data).to.be.true;
   }).timeout(4000);
 

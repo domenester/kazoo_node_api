@@ -16,6 +16,18 @@ import { DeviceDeleteService } from "../../../../services/device/device-delete.s
 import { CallflowDeleteService } from "../../../../services";
 import UserByDepartment from "./user-by-department";
 import { userMock } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
+import { deleteUserByEndpoint } from "./user-delete.spec";
+
+export const getUserByDepartmentService = async (department: string) => {
+  const userApi = new UserApi(logger);
+  const userByDepartment = new UserByDepartment(logger, userApi.path);
+  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/department/${department}`);
+  const response = await serviceTestApiInstance.request(
+    userByDepartment.method, {}, {}, "Testing User By Department"
+  );
+  return response;
+}
 
 describe("Testing User By Department", async () => {
 
@@ -30,11 +42,8 @@ describe("Testing User By Department", async () => {
   });
 
   it("should add new user to get it by department", async () => {
-
     const body: IUserNew = userMock;
-
     let response = await addUserService(body).catch(err => err);
-    
     userAdded = response.data;
     expect(typeof response.data.callflow === "string").to.be.true;
     expect(response.data.devices.length).to.be.equal(1);
@@ -43,36 +52,19 @@ describe("Testing User By Department", async () => {
   it("should return empty array for department that don't exist", async () => {
     const userApi = new UserApi(logger);
     const userByDepartment = new UserByDepartment(logger, userApi.path);
-
-    let response = await request(
-      `http://${NODE_HOST()}:${NODE_PORT()}${userApi.path}/department/wrongdepartment`,
-      { method: userByDepartment.method },
-    );
-    response = JSON.parse(response);
-    expect(response.data.length).to.be.equal(0);
+    let response = await getUserByDepartmentService("wrongdepartment");
+    expect(response.length).to.be.equal(0);
   }).timeout(4000);
 
   it("should return the user created by department", async () => {
     const userApi = new UserApi(logger);
     const userByDepartment = new UserByDepartment(logger, userApi.path);
-
-    let response = await request(
-      `http://${NODE_HOST()}:${NODE_PORT()}${userApi.path}/department/${userAdded.last_name}`,
-      { method: userByDepartment.method },
-    );
-    response = JSON.parse(response);
-    expect(response.data.length).to.be.gte(1);
+    let response = await getUserByDepartmentService(userAdded.last_name);
+    expect(response.length).to.be.gte(1);
   }).timeout(4000);
 
   it("should remove user, device and callflow added", async () => {
-    const userResponse = await UserDeleteService(userAdded.id);
-    expect(userResponse.status).to.be.equal("success");
-
-    const deviceResponse = await DeviceDeleteService(userAdded.devices[0]);
-    expect(deviceResponse.status).to.be.equal("success");
-
-    const callflowResponse = await CallflowDeleteService(userAdded.callflow);
-    expect(callflowResponse.status).to.be.equal("success");
+    await deleteUserByEndpoint(userAdded);
   }).timeout(10000);
   
 });

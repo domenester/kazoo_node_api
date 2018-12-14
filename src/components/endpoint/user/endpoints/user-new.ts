@@ -7,6 +7,7 @@ import { UserNewValidation } from "../validations/user-new.validation";
 import { DeviceCreateService } from "../../../../services/device";
 import { CallflowCreateService } from "../../../../services/callflow";
 import { UserUpdateService } from "../../../../services/user/user-update.service";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserNew implements IEndpoint<Request, {}> {
   public path = "/";
@@ -64,6 +65,6 @@ export default class UserNew implements IEndpoint<Request, {}> {
       if (userUpdated instanceof Error) { return userUpdated; }
     }
 
-    return {data: userUpdated || userAdded, message: responseMessages.userNew};
+    return endpointResponseNormalizer(userUpdated || userAdded, responseMessages.userNew);
   }
 }

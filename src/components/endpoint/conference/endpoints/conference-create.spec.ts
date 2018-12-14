@@ -16,25 +16,16 @@ import { CallflowDeleteService } from "../../../../services/callflow/callflow-de
 import { addUserService } from "../../user/endpoints/user-new.spec";
 import { deleteUserByEndpoint } from "../../user/endpoints/user-delete.spec";
 import { userMock, userMock2 } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
 
-export const addConferenceService = async (id: string, endpoint: string) => {
+export const addConferenceByEndpoint = async (id: string, endpoint: string) => {
   const conferenceApi = new ConferenceApi(logger);
   const conferenceCreate = new ConferenceCreate(logger, conferenceApi.path);
-
-  let response = await request(
-    `http://${NODE_HOST()}:${NODE_PORT()}${conferenceApi.path}/${id}/${endpoint}`,
-    {
-      method: conferenceCreate.method,
-      headers: { "Content-Type": "application/json" },
-      rejectUnauthorized: false
-    },
-  ).catch(err => err);
-
-  try {
-    return JSON.parse(response);
-  } catch (err) {
-    return response;
-  }
+  const serviceTestApiInstance = new ServiceTestApi(`${conferenceApi.path}/${id}/${endpoint}`);
+  const response = await serviceTestApiInstance.request(
+    conferenceCreate.method, {}, {}, "Testing Conference Create"
+  );
+  return response;
 }
 
 describe("Testing Conference Create", async () => {
@@ -66,9 +57,9 @@ describe("Testing Conference Create", async () => {
   it("should create a new conference", async () => {
     const id = userCreated.id;
     const endpoint = userInvited.id;
-    const response = await addConferenceService(id, endpoint);
-    expect(response.data.status).to.be.equal("success");
-    conferenceCreated = response.data.data.endpoint_responses[0];
+    const response = await addConferenceByEndpoint(id, endpoint);
+    expect(response.status).to.be.equal("success");
+    conferenceCreated = response.data.endpoint_responses[0];
   });
 
   it("should remove user, device and callflow added", async () => {

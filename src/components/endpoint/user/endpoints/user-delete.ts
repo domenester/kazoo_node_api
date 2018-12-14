@@ -4,6 +4,7 @@ import {IEndpoint, IRequest, Verb, HandlerResponse} from "../../../endpoint/endp
 import { UserService } from "../../../../services";
 import responseMessages from "../../../../config/endpoints-response-messages";
 import { UserDeleteValidation } from "../validations/user-delete.validation";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserNew implements IEndpoint<Request, {}> {
   public path = "/:id";
@@ -24,6 +25,6 @@ export default class UserNew implements IEndpoint<Request, {}> {
     const userDeleted = await UserService.remove(req.parameters.id);
     if (userDeleted instanceof Error) { return userDeleted; }
 
-    return {data: userDeleted, message: responseMessages.userDelete};
+    return endpointResponseNormalizer(userDeleted, responseMessages.userDelete);
   }
 }

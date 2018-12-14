@@ -3,6 +3,7 @@ import * as winston from "winston";
 import {IEndpoint, IRequest, Verb} from "../../endpoint.interface";
 import { ConferenceActionValidation } from "../validations/conference-action.validation";
 import { ConferenceActionService } from "../../../../services";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class ConferenceAction implements IEndpoint<Request, {}> {
   public path = "/:id/:action";
@@ -29,6 +30,6 @@ export default class ConferenceAction implements IEndpoint<Request, {}> {
 
     if (conferenceCreated instanceof Error) { return conferenceCreated; }
 
-    return {data: conferenceCreated};
+    return endpointResponseNormalizer(conferenceCreated);
   }
 }

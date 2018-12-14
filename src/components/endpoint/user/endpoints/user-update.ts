@@ -6,6 +6,7 @@ import responseMessages from "../../../../config/endpoints-response-messages";
 import { UserUpdateValidation } from "../validations/user-update.validation";
 import { CallflowUpdateService } from "../../../../services/callflow/callflow-update";
 import { callflowUpdateNormalized } from "../../../../normalizer/callflow/callflow-update.normalizer";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserUpdate implements IEndpoint<Request, {}> {
   public path = "/:id";
@@ -39,6 +40,6 @@ export default class UserUpdate implements IEndpoint<Request, {}> {
       });
     }
     userUpdate.data["extension"] = req.body.extension;
-    return {data: userUpdate, message: responseMessages.userUpdate};
+    return endpointResponseNormalizer(userUpdate, responseMessages.userUpdate);
   }
 }

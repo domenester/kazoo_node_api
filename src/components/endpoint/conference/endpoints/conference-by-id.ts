@@ -4,6 +4,7 @@ import {IEndpoint, IRequest, Verb} from "../../endpoint.interface";
 import { ConferenceCreateService } from "../../../../services";
 import { ConferenceByIdValidation } from "../validations/conference-by-id.validation";
 import { ConferenceByIdService } from "../../../../services/conference/conference-by-id.service";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class ConferenceById implements IEndpoint<Request, {}> {
   public path = "/:id";
@@ -28,6 +29,6 @@ export default class ConferenceById implements IEndpoint<Request, {}> {
 
     if (conferenceById instanceof Error) { return conferenceById; }
 
-    return {data: conferenceById};
+    return endpointResponseNormalizer(conferenceById);
   }
 }

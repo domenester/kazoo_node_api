@@ -16,28 +16,16 @@ import { DeviceDeleteService } from "../../../../services/device";
 import { CallflowDeleteService } from "../../../../services";
 import { createNewUser } from "../../../../services/user/user-new.service.spec";
 import { userMock } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
 
 export const deleteUserService = async (userId: string) => {
-  const env = process.env;
   const userApi = new UserApi(logger);
   const userDelete = new UserDelete(logger, userApi.path);
-
-  let response = await request(
-    `http://${NODE_HOST()}:${NODE_PORT()}${userApi.path}/${userId}`,
-    {
-      method: userDelete.method,
-      headers: { "Content-Type": "application/json" },
-      rejectUnauthorized: false
-    },
-  ).catch((e) => {
-    return JSON.parse(e.error)
-  });
-
-  try {
-    return JSON.parse(response);
-  } catch (err) {
-    return response;
-  }
+  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/${userId}`);
+  const response = await serviceTestApiInstance.request(
+    userDelete.method, {}, {}, "Testing User Delete"
+  );
+  return response;
 }
 
 export const deleteUserByEndpoint = async (userAdded: any) => {
@@ -66,6 +54,6 @@ describe("Testing User Delete", async () => {
 
   it("should delete the user created to delete", async () => {
     let response = await deleteUserService(userIdAdded);
-    expect(response.data.status).to.be.eq("success");
+    expect(response.status).to.be.eq("success");
   });
 }).timeout(10000);

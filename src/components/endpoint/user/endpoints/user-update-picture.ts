@@ -10,6 +10,7 @@ import { UserService } from "../../../../services";
 import { UserProfilePictureValidation } from "../validations/user-profile-picture.validation";
 import responseMessages from "../../../../config/endpoints-response-messages";
 import { errorGenerator } from "../../../error";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 const fsRename = promisify(fs.rename);
 
@@ -35,6 +36,6 @@ export default class UploadProfilePicture implements IEndpoint<Request, {}> {
     const targetPath = `${pathToUpload()}/${imageName}`;
     await fsRename(request.body.path, targetPath).catch(err => err);
 
-    return {data: true, message: responseMessages.uploadProfilePicture};
+    return endpointResponseNormalizer({data: true}, responseMessages.uploadProfilePicture);
   }
 }

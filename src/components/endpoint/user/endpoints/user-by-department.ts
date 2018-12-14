@@ -8,6 +8,7 @@ import { UserByDepartmentService } from "../../../../services/user/user-by-depar
 import { errorGenerator } from "../../../error/error";
 import { user as errorMessage } from "../../../error/error-messages";
 import { UserByIdService } from "../../../../services/user/user-by-id.service";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserByDepartment implements IEndpoint<Request, {}> {
   public path = "/department/:department";
@@ -49,6 +50,6 @@ export default class UserByDepartment implements IEndpoint<Request, {}> {
       users.push( (user as any).data );
     })
 
-    return {data: users, message: responseMessages.userList};
+    return endpointResponseNormalizer(users, responseMessages.userList);
   }
 }

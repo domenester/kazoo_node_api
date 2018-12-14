@@ -7,6 +7,7 @@ import { errorGenerator } from "../../../error/error";
 import { login as errorMessage } from "../../../error/error-messages";
 import { LoginValidation } from "../validation/login.validation";
 import responseMessages from "../../../../config/endpoints-response-messages";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class Login implements IEndpoint<Request, {}> {
   public path = "/login";
@@ -33,9 +34,6 @@ export default class Login implements IEndpoint<Request, {}> {
 
     if (loginService instanceof Error) { return loginService; }
 
-    return { 
-      data: loginService, 
-      message: responseMessages.login 
-    };
+    return endpointResponseNormalizer(loginService, responseMessages.login);
   }
 }

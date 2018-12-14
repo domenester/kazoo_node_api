@@ -36,10 +36,15 @@ export class ServiceTestApi {
     const defaultOptions = await this.options(method, body);
     const response = await request(
       this.fullPath, { ...defaultOptions, ...options },
-    ).then(res => JSON.parse(res).data)
+    ).then(res => JSON.parse(res))
     .catch( (err) => {
       logger.error(`Error testing: ${this.fullPath}`);
-      return errorGenerator( err, err.statusCode, stack);
+      try {
+        const message = JSON.parse(err.error).message;
+        return errorGenerator( message, err.statusCode, stack);
+      } catch (err) {
+        return errorGenerator( err, err.statusCode, stack); 
+      }
     });
     if (response instanceof Error) { return response; }
     return response;

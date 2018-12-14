@@ -4,6 +4,7 @@ import {IEndpoint, IRequest, Verb} from "../../endpoint.interface";
 import { SetVideoValidation } from "../validations/set-video.validation";
 import { promisify } from "util";
 import { exec } from "child_process";
+import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class SetVideo implements IEndpoint<Request, {}> {
   public path = "/:conferenceId/setvideo/:memberId";
@@ -28,6 +29,6 @@ export default class SetVideo implements IEndpoint<Request, {}> {
     this.logger.info(`Command line stdout: ${stdout}`);
     this.logger.info(`Command line stderr: ${stderr}`);
 
-    return {data: { stdout, stderr }};
+    return endpointResponseNormalizer({ stdout, stderr });
   }
 }

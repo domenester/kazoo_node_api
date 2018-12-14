@@ -10,26 +10,16 @@ import { NODE_HOST, NODE_PORT } from "../../../../config/env";
 import ScheduledConferenceCreate from "./scheduled-conference-create";
 import { ScheduledConfCreateService } from "../../../../services";
 import { bodyCreate } from "../../../../services/scheduled-conference/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
 
 export const scheduleConfCreateByEndpoint = async (body: any) => {
   const scheduledConferenceApi = new ScheduledConferenceApi(logger);
   const scheduledConferenceCreate = new ScheduledConferenceCreate(logger, scheduledConferenceApi.path);
-
-  let response = await request(
-    `http://${NODE_HOST()}:${NODE_PORT()}${scheduledConferenceCreate.fullPath}`,
-    {
-      method: scheduledConferenceCreate.method,
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-      rejectUnauthorized: false
-    },
-  ).catch(err => JSON.parse(err.error));
-
-  try {
-    return JSON.parse(response);
-  } catch (err) {
-    return response;
-  }
+  const serviceTestApiInstance = new ServiceTestApi(scheduledConferenceCreate.fullPath);
+  const response = await serviceTestApiInstance.request(
+    scheduledConferenceCreate.method, body, {}, "Testing Schedule Conference Create"
+  );
+  return response;
 }
 
 describe("Testing Schedule Conference Create", async () => {
@@ -45,7 +35,7 @@ describe("Testing Schedule Conference Create", async () => {
   });
 
   it("should add new schedule conference", async () => {
-    let response = await ScheduledConfCreateService(bodyCreate).catch(err => err);
-    expect(response).to.be.not.null;
+    let response = await scheduleConfCreateByEndpoint(bodyCreate).catch(err => err);
+    expect(response.moderator).to.be.equal(bodyCreate.moderator);
   });
 });

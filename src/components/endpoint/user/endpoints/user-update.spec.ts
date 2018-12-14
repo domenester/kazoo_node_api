@@ -16,26 +16,17 @@ import { CallflowDeleteService } from "../../../../services/callflow/callflow-de
 import { UserService } from "../../../../services";
 import { addUserService } from "./user-new.spec";
 import { userMock } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
+import { deleteUserByEndpoint } from "./user-delete.spec";
 
-export const updateUserService = async (body: IUserUpdate) => {
+export const updateUserByEndpoint = async (body: any) => {
   const userApi = new UserApi(logger);
   const userUpdate = new UserUpdate(logger, userApi.path);
-
-  let response = await request(
-    `http://${NODE_HOST()}:${NODE_PORT()}${userUpdate.fullPath}${body.id}`,
-    {
-      method: userUpdate.method,
-      body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-      rejectUnauthorized: false
-    },
-  ).catch(err => JSON.parse(err.error));
-
-  try {
-    return JSON.parse(response);
-  } catch (err) {
-    return response;
-  }
+  const serviceTestApiInstance = new ServiceTestApi(`${userUpdate.fullPath}${body.id}`);
+  const response = await serviceTestApiInstance.request(
+    userUpdate.method, body, {}, "Testing User Update"
+  );
+  return response;
 }
 
 describe("Testing User Update", async () => {
@@ -72,8 +63,8 @@ describe("Testing User Update", async () => {
       department: "department changed",
     };
 
-    let response = await updateUserService(body);
-    const userUpdated = response.data.data;
+    let response = await updateUserByEndpoint(body);
+    const userUpdated = response.data;
     expect(userUpdated.email).to.be.equal(body.email);
     expect(userUpdated.first_name).to.be.equal(body.name);
     expect(userUpdated.last_name).to.be.equal(body.department);
@@ -82,13 +73,6 @@ describe("Testing User Update", async () => {
   }).timeout(10000);
 
   it("should remove user, device and callflow added", async () => {
-    const userResponse = await UserDeleteService(userAdded.id);
-    expect(userResponse.status).to.be.equal("success");
-
-    const deviceResponse = await DeviceDeleteService(userAdded.devices[0]);
-    expect(deviceResponse.status).to.be.equal("success");
-
-    const callflowResponse = await CallflowDeleteService(userAdded.callflow);
-    expect(callflowResponse.status).to.be.equal("success");
+    await deleteUserByEndpoint(userAdded);
   }).timeout(10000);
 });

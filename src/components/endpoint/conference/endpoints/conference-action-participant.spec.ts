@@ -15,29 +15,18 @@ import { CallflowDeleteService } from "../../../../services/callflow/callflow-de
 import { addUserService } from "../../user/endpoints/user-new.spec";
 import { deleteUserByEndpoint } from "../../user/endpoints/user-delete.spec";
 import ConferenceParticiantAction from "./conference-action-participant";
-import { addConferenceService } from "./conference-create.spec";
+import { addConferenceByEndpoint } from "./conference-create.spec";
 import { userMock, userMock2 } from "../../../../services/user/mocks";
+import { ServiceTestApi } from "../../../../services/service-test.api";
 
-export const addConferenceActionParticipantService = async (
-  id: string, participantId: string, action: string
-) => {
+export const addConferenceActionParticipantByEndpoint = async (id: string, participantId: string, action: string) => {
   const conferenceApi = new ConferenceApi(logger);
   const conferenceAction = new ConferenceParticiantAction(logger, conferenceApi.path);
-
-  let response = await request(
-    `http://${NODE_HOST()}:${NODE_PORT()}${conferenceApi.path}/${id}/${participantId}/${action}`,
-    {
-      method: conferenceAction.method,
-      headers: { "Content-Type": "application/json" },
-      rejectUnauthorized: false
-    },
-  ).catch(err => err);
-
-  try {
-    return JSON.parse(response);
-  } catch (err) {
-    return response;
-  }
+  const serviceTestApiInstance = new ServiceTestApi(`${conferenceApi.path}/${id}/${participantId}/${action}`);
+  const response = await serviceTestApiInstance.request(
+    conferenceAction.method, {}, {}, "Testing Conference Action"
+  );
+  return response;
 }
 
 describe("Testing Conference Action Participant", async () => {
@@ -69,16 +58,16 @@ describe("Testing Conference Action Participant", async () => {
   it("should create a new conference", async () => {
     const id = userCreated.id;
     const endpoint = userInvited.id;
-    const response = await addConferenceService(id, endpoint);
-    expect(response.data.status).to.be.equal("success");
-    conferenceCreated = response.data.data.endpoint_responses[0];
+    const response = await addConferenceByEndpoint(id, endpoint);
+    expect(response.status).to.be.equal("success");
+    conferenceCreated = response.data.endpoint_responses[0];
   });
 
   it("should create a new conference action for a participant", async () => {
-    const response = await addConferenceActionParticipantService(
+    const response = await addConferenceActionParticipantByEndpoint(
       conferenceCreated.endpoint_id, userInvited.id, "mute"
     );
-    expect(response.data.status).to.be.equal("success");
+    expect(response.status).to.be.equal("success");
   });
 
   it("should remove user, device and callflow added", async () => {
