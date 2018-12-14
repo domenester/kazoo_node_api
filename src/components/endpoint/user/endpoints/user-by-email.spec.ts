@@ -14,22 +14,22 @@ import { UserDeleteService } from "../../../../services/user/user-delete.service
 import { addUserService } from "./user-new.spec";
 import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
 import { CallflowDeleteService } from "../../../../services";
-import UserByDepartment from "./user-by-department";
+import UserByEmail from "./user-by-email";
 import { userMock } from "../../../../services/user/mocks";
 import { ServiceTestApi } from "../../../../services/service-test.api";
 import { deleteUserByEndpoint } from "./user-delete.spec";
 
-export const getUserByDepartmentService = async (department: string) => {
+export const getUserByEmailByEndpoint = async (email: string) => {
   const userApi = new UserApi(logger);
-  const userByDepartment = new UserByDepartment(logger, userApi.path);
-  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/department/${department}`);
+  const userByEmail = new UserByEmail(logger, userApi.path);
+  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/email/${email}`);
   const response = await serviceTestApiInstance.request(
-    userByDepartment.method, {}, {}, "Testing User By Department"
+    userByEmail.method, {}, {}, "Testing User By Email"
   );
   return response;
 }
 
-describe.only("Testing User By Department", async () => {
+describe.only("Testing User By Email", async () => {
 
   let userAdded: any;
   
@@ -41,7 +41,7 @@ describe.only("Testing User By Department", async () => {
     server.stop();
   });
 
-  it("should add new user to get it by department", async () => {
+  it("should add new user to get it by email", async () => {
     const body: IUserNew = userMock;
     let response = await addUserService(body).catch(err => err);
     userAdded = response.data;
@@ -49,17 +49,17 @@ describe.only("Testing User By Department", async () => {
     expect(response.data.devices.length).to.be.equal(1);
   }).timeout(10000);
 
-  it("should return empty array for department that don't exist", async () => {
+  it("should return empty array for email that don't exist", async () => {
     const userApi = new UserApi(logger);
-    const userByDepartment = new UserByDepartment(logger, userApi.path);
-    let response = await getUserByDepartmentService("wrongdepartment");
+    const userByEmail = new UserByEmail(logger, userApi.path);
+    let response = await getUserByEmailByEndpoint("anyemail@mock.z");
     expect(response.length).to.be.equal(0);
   }).timeout(4000);
 
-  it("should return the user created by department", async () => {
+  it("should return the user created by email", async () => {
     const userApi = new UserApi(logger);
-    const userByDepartment = new UserByDepartment(logger, userApi.path);
-    let response = await getUserByDepartmentService(userAdded.last_name);
+    const userByEmail = new UserByEmail(logger, userApi.path);
+    let response = await getUserByEmailByEndpoint(userAdded.email);
     expect(response.length).to.be.gte(1);
   }).timeout(4000);
 

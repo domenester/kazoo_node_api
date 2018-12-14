@@ -2,16 +2,17 @@ import {Request} from "express-serve-static-core";
 import * as winston from "winston";
 import {IEndpoint, IRequest, Verb, HandlerResponse} from "../../../endpoint/endpoint.interface";
 import responseMessages from "../../../../config/endpoints-response-messages";
-import { UserByDepartmentValidation } from "../validations/user-by-department.validation";
+import { UserByEmailValidation } from "../validations/user-by-email.validation";
 import { CallflowByIdService } from "../../../../services/callflow/callflow-by-id.service";
 import { UserByDepartmentService } from "../../../../services/user/user-by-department";
 import { errorGenerator } from "../../../error/error";
 import { user as errorMessage } from "../../../error/error-messages";
-import { UserByIdService } from "../../../../services/user/user-by-id.service";
 import { endpointResponseNormalizer } from "../../../../normalizer";
+import { UserByEmailService } from "../../../../services/user/user-by-email";
+import { UserByIdService } from "../../../../services/user/user-by-id.service";
 
-export default class UserByDepartment implements IEndpoint<Request, {}> {
-  public path = "/department/:department";
+export default class UserByEmail implements IEndpoint<Request, {}> {
+  public path = "/email/:email";
   public method: Verb = "get";
   public fullPath: string;
   public bodySchema = "";
@@ -23,38 +24,31 @@ export default class UserByDepartment implements IEndpoint<Request, {}> {
   public handler = async (req: IRequest): Promise<HandlerResponse> => {
     this.logger.info(`Accessing path: ${this.path}`);
 
-    const validation = await UserByDepartmentValidation(req.parameters);
+    const validation = await UserByEmailValidation(req.parameters);
     if (validation instanceof Error) { return validation; }
 
-    const userByDepartment = await UserByDepartmentService(req.parameters.department);
+    const userByEmail = await UserByEmailService(req.parameters.email);
 
-    if (!userByDepartment.data) {
-      return errorGenerator(errorMessage.notFound, 400, "UserByDepartment");
+    if (!userByEmail.data) {
+      return errorGenerator(errorMessage.notFound, 400, "userByEmail");
     }
 
     // The user need to be search by id because getting by filter, dont give us all attriutes
     const users = [];
 
     const usersById = await Promise.all(
-      userByDepartment.data.map((user) => UserByIdService(user.id))
+      userByEmail.data.map((user) => UserByIdService(user.id))
     ).catch(err => err);
 
     const callflowsById = await Promise.all(
-      usersById.map( user => {
-        const callflowId = (user as any).data.callflow;
-        if ( callflowId ) {
-          return CallflowByIdService((user as any).data.callflow);
-        } else {
-          return new Promise((resolve) => resolve(null));
-        }
-      })
+      usersById.map( user => CallflowByIdService((user as any).data.callflow))
     ).catch(err => err);
 
     usersById.map( (user, index) => {
-      if (callflowsById[index] && callflowsById[index].data) {
+      if (callflowsById[index].data) {
         (user as any).data["extension"] = callflowsById[index].data["numbers"][1];
-        users.push( (user as any).data );
       }
+      users.push( (user as any).data );
     })
 
     return endpointResponseNormalizer(users, responseMessages.userList);

@@ -26,10 +26,13 @@ export default class UserById implements IEndpoint<Request, {}> {
     if (validation instanceof Error) { return validation; }
 
     const userById = await UserByIdService(req.parameters.id);
-    const callflowById = await CallflowByIdService(userById.data.callflow);
-    let user = userById.data;
-    user["extension"] = callflowById.data["numbers"][1];
+    let user: any;
+    if (userById.data.callflow) {
+      user = userById.data;
+      const callflowById = await CallflowByIdService(userById.data.callflow);
+      user["extension"] = callflowById.data["numbers"][1];
+    }
 
-    return endpointResponseNormalizer(user);
+    return endpointResponseNormalizer(user || userById.data);
   }
 }

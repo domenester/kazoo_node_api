@@ -23,7 +23,7 @@ import { ServiceTestApi } from "../../../../services/service-test.api";
 export const resetPasswordByEndpoint = async (userId: string, body: any) => {
   const userApi = new UserApi(logger);
   const userUpdatePassword = new UserUpdatePassword(logger, userApi.path);
-  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/update_password/${userId}`);
+  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/${userId}/update_password`);
   const response = await serviceTestApiInstance.request(
     userUpdatePassword.method, body, {}, "Testing User Update Password"
   );
@@ -45,7 +45,20 @@ describe("Testing User Update Password", async () => {
   it("should create a new user to update it", async () => {
     const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
-  });
+  }).timeout(5000);
+
+  it("should throw because of invalid password", async () => {
+    const userApi = new UserApi(logger);
+    const userUpdatePassword = new UserUpdatePassword(logger, userApi.path);
+    const body = {
+      id: userCreated.id,
+      username: userCreated.username,
+      password: "wrongpass",
+      newPassword: "anypassword"
+    }
+    let response = await resetPasswordByEndpoint(userCreated.id, body);
+    expect(response.code).to.be.equal(401);
+  }).timeout(4000);
 
   it("should update user and devices password", async () => {
     const userApi = new UserApi(logger);

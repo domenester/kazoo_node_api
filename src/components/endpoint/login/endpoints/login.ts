@@ -10,9 +10,9 @@ import responseMessages from "../../../../config/endpoints-response-messages";
 import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class Login implements IEndpoint<Request, {}> {
-  public path = "/login";
+  public path = "";
   public fullPath: string;
-  public method: Verb = "put";
+  public method: Verb = "post";
   public bodySchema = LoginValidation;
   private logger: winston.Logger;
 
@@ -22,7 +22,7 @@ export default class Login implements IEndpoint<Request, {}> {
   }
 
   public handler = async (req: IRequest): Promise<HandlerResponse> => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
 
     const validation = await this.bodySchema(req.body);
 

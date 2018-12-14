@@ -34,10 +34,14 @@ export default class UserByExtension implements IEndpoint<Request, {}> {
     }
 
     const userById = await UserByIdService(userByExtension.data[0].id).catch(err => err);
-    const callflowById = await CallflowByIdService(userById.data.callflow).catch(err => err);
-    let user = userById.data;
-    user["extension"] = callflowById.data["numbers"][1];
 
-    return endpointResponseNormalizer(userById, responseMessages.userList);
+    let user: any;
+    if (userById.data.callflow) {
+      user = userById.data;
+      const callflowById = await CallflowByIdService(userById.data.callflow);
+      user["extension"] = callflowById.data["numbers"][1];
+    }
+
+    return endpointResponseNormalizer(user || userById.data, responseMessages.userList);
   }
 }

@@ -11,7 +11,7 @@ import { deviceUpdatePasswordNormalized } from "../../../../normalizer/device/de
 import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class UserUpdatePassword implements IEndpoint<Request, {}> {
-  public path = "/update_password/:id";
+  public path = "/:id/update_password";
   public fullPath: string;
   public method: Verb = "post";
   public bodySchema = "";
@@ -35,7 +35,7 @@ export default class UserUpdatePassword implements IEndpoint<Request, {}> {
     });
 
     if (loginResponse.status !== "success") {
-      errorGenerator( errorMessage.unauthorized, 401, "UserUpdatePassword");
+      return errorGenerator( errorMessage.unauthorized, 401, "UserUpdatePassword");
     }
 
     const userUpdatePassResponse = await UserService.updatePassword(

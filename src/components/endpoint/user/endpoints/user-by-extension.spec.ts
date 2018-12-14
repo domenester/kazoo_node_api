@@ -58,7 +58,7 @@ describe("Testing User By Extension", async () => {
 
   it("should return the user created by extension", async () => {
     const response = await getUserByExtensionService(userMock.extension);
-    expect(response.data.id).to.be.equal(userAdded.id);
+    expect(response.id).to.be.equal(userAdded.id);
   }).timeout(4000);
 
   it("should remove user, device and callflow added", async () => {
