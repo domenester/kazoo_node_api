@@ -9,7 +9,7 @@ import { userMock } from "./mocks";
 import { addUserService } from "../../components/endpoint/user/endpoints/user-new.spec";
 import { deleteUserByEndpoint } from "../../components/endpoint/user/endpoints/user-delete.spec";
 
-describe("Testing User By Extension Service", async () => {
+describe.only("Testing User By Extension Service", async () => {
 
   let userCreated: any;
 
@@ -38,6 +38,6 @@ describe("Testing User By Extension Service", async () => {
   });
 
   it("should delete the user created", async () => {
-    await deleteUserByEndpoint(userCreated.data);
+    await deleteUserByEndpoint(userCreated);
   }).timeout(10000);
 });

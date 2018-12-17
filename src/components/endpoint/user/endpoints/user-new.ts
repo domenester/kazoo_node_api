@@ -65,6 +65,6 @@ export default class UserNew implements IEndpoint<Request, {}> {
       if (userUpdated instanceof Error) { return userUpdated; }
     }
 
-    return endpointResponseNormalizer(userUpdated || userAdded, responseMessages.userNew);
+    return endpointResponseNormalizer(userUpdated.data || userAdded.data, responseMessages.userNew);
   }
 }

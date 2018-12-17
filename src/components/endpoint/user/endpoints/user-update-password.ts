@@ -39,7 +39,7 @@ export default class UserUpdatePassword implements IEndpoint<Request, {}> {
     }
 
     const userUpdatePassResponse = await UserService.updatePassword(
-      loginResponse.data.owner_id, req.body.password
+      loginResponse.data.owner_id, req.body.newPassword
     ).catch( err => {
       this.logger.error(`Error trying to update user '${req.body.username}' password`);
       return err;

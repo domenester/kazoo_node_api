@@ -11,7 +11,7 @@ import { endpointResponseNormalizer } from "../../../../normalizer";
 export default class UserUpdate implements IEndpoint<Request, {}> {
   public path = "/:id";
   public fullPath: string;
-  public method: Verb = "post";
+  public method: Verb = "patch";
   public bodySchema = "";
   private logger: winston.Logger;
   constructor(logger: winston.Logger, fatherPath: string) {
@@ -40,6 +40,6 @@ export default class UserUpdate implements IEndpoint<Request, {}> {
       });
     }
     userUpdate.data["extension"] = req.body.extension;
-    return endpointResponseNormalizer(userUpdate, responseMessages.userUpdate);
+    return endpointResponseNormalizer(userUpdate.data, responseMessages.userUpdate);
   }
 }

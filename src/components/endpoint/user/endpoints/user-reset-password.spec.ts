@@ -45,7 +45,7 @@ describe("Testing User Reset Password", async () => {
   it("should create a new user to update it", async () => {
     const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
-  });
+  }).timeout(10000);
 
   it("should update user and devices password", async () => {
     const userApi = new UserApi(logger);
@@ -56,11 +56,11 @@ describe("Testing User Reset Password", async () => {
     }
     let response = await resetPasswordByEndpoint(body);
     expect(response.data).to.be.true;
-  }).timeout(4000);
+  }).timeout(10000);
 
   it("should delete the user created", async () => {
     const response = await UserDeleteService(userCreated.id);
     expect(response.status).to.be.equal("success");
-  });
+  }).timeout(8000);
 
 });

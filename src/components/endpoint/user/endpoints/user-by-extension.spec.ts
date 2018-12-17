@@ -46,7 +46,7 @@ describe("Testing User By Extension", async () => {
 
     let response = await addUserService(body).catch(err => err);
     
-    userAdded = response.data;
+    userAdded = response;
     expect(typeof userAdded.callflow === "string").to.be.true;
     expect(userAdded.devices.length).to.be.equal(1);
   }).timeout(10000);

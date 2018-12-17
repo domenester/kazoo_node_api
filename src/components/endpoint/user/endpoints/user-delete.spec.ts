@@ -43,17 +43,20 @@ describe("Testing User Delete", async () => {
 
   before("Starting server...", async () => {
     await server.start();
-    const body: IUserNew = userMock;
-    const userCreated = await createNewUser(body);
-    userIdAdded = userCreated.id;
   });
 
   after( async () => {
     server.stop();
   });
 
+  it("should create a user to delet it", async () => {
+    const body: IUserNew = userMock;
+    const userCreated = await addUserService(body).catch(err => err);
+    userIdAdded = userCreated.id;
+  }).timeout(10000);
+
   it("should delete the user created to delete", async () => {
     let response = await deleteUserService(userIdAdded);
     expect(response.status).to.be.eq("success");
-  });
-}).timeout(10000);
+  }).timeout(10000);
+});

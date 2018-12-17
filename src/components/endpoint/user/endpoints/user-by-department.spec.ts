@@ -29,7 +29,7 @@ export const getUserByDepartmentService = async (department: string) => {
   return response;
 }
 
-describe.only("Testing User By Department", async () => {
+describe("Testing User By Department", async () => {
 
   let userAdded: any;
   
@@ -44,9 +44,9 @@ describe.only("Testing User By Department", async () => {
   it("should add new user to get it by department", async () => {
     const body: IUserNew = userMock;
     let response = await addUserService(body).catch(err => err);
-    userAdded = response.data;
-    expect(typeof response.data.callflow === "string").to.be.true;
-    expect(response.data.devices.length).to.be.equal(1);
+    userAdded = response;
+    expect(typeof userAdded.callflow === "string").to.be.true;
+    expect(userAdded.devices.length).to.be.equal(1);
   }).timeout(10000);
 
   it("should return empty array for department that don't exist", async () => {

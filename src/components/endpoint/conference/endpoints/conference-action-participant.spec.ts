@@ -46,13 +46,13 @@ describe("Testing Conference Action Participant", async () => {
   it("should create a new user owner of a conference", async () => {
     const body: IUserNew = userMock;
     const response = await addUserService(body).catch(err => err);
-    userCreated = response.data;
+    userCreated = response;
   }).timeout(10000);
 
   it("should create a new user to invite to a conf", async () => {
     const body: IUserNew = userMock2;
     const response = await addUserService(body).catch(err => err);
-    userInvited = response.data;
+    userInvited = response;
   }).timeout(10000);
 
   it("should create a new conference", async () => {

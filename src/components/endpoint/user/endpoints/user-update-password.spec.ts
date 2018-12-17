@@ -6,7 +6,7 @@ import * as request from "request-promise";
 import { promisify } from "util";
 import {default as logger} from "../../../../components/logger/logger";
 import server from "../../../../server";
-import { login as errorMessages } from "../../../error/error-messages";
+import { login as errorMessages, user } from "../../../error/error-messages";
 import { IRequest } from "../../endpoint.interface";
 import UserList from "./user-list";
 import UserApi from "../user.api";
@@ -44,7 +44,7 @@ describe("Testing User Update Password", async () => {
 
   it("should create a new user to update it", async () => {
     const body: IUserNew = userMock;
-    userCreated = await createNewUser(body);
+    userCreated = await createNewUser(body).catch(err => err);
   }).timeout(5000);
 
   it("should throw because of invalid password", async () => {

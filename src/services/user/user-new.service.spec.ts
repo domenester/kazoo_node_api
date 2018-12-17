@@ -22,7 +22,6 @@ describe("Testing User Create Service", async () => {
   });
 
   after( async () => {
-    await UserDeleteService(userCreated.id).catch(err => err);
     server.stop();
   });
 
@@ -31,6 +30,10 @@ describe("Testing User Create Service", async () => {
     const response = await UserNew(body);
     expect(response.data.email).to.be.equal(body.email);
     expect(response.data.username).to.be.equal(body.racf);
-    userCreated = response.data;
+    userCreated = response;
   });
-});
+
+  it("should delete the user", async () => {
+    await UserDeleteService(userCreated.data.id).catch(err => err);
+  });
+}).timeout(5000);

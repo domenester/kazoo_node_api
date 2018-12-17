@@ -19,19 +19,22 @@ describe("Testing Device Delete Service", async () => {
 
   before( async () => {
     await server.start();
+  });
+
+  after( () => {
+    server.stop();
+  });
+
+  it("should create user and device", async () => {
     const body: IUserNew = userMock;
     userCreated = await createNewUser(body);
     deviceCreated = await createNewDevice(userCreated.id, userCreated.username);
-  });
-
-  after( async () => {
-    await UserDeleteService(userCreated.id);
-    server.stop();
-  });
+  }).timeout(10000);
 
   it("should delete the device created", async () => {
     const response = await DeviceDeleteService(deviceCreated.id);
     expect(response.status).to.be.equal("success");
+    await UserDeleteService(userCreated.id);
   });
 
-}).timeout(5000);
+});

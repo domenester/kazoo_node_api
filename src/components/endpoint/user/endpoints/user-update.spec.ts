@@ -47,7 +47,7 @@ describe("Testing User Update", async () => {
 
     let response = await addUserService(body).catch(err => err);
     
-    userAdded = response.data;
+    userAdded = response;
     expect(typeof userAdded.callflow === "string").to.be.true;
     expect(userAdded.devices.length).to.be.equal(1);
   }).timeout(10000);
@@ -64,7 +64,7 @@ describe("Testing User Update", async () => {
     };
 
     let response = await updateUserByEndpoint(body);
-    const userUpdated = response.data;
+    const userUpdated = response;
     expect(userUpdated.email).to.be.equal(body.email);
     expect(userUpdated.first_name).to.be.equal(body.name);
     expect(userUpdated.last_name).to.be.equal(body.department);

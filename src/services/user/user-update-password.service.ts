@@ -8,7 +8,7 @@ export const UserUpdatePasswordService = async (userId: string, password: string
   const location = `/users/${userId}`;
   const serviceApiInstance = serviceApi(location);
   const response = await serviceApiInstance.request(
-    "post", user, {}, "UserUpdatePasswordService"
+    "post", { data: user.data}, {}, "UserUpdatePasswordService"
   );
   return response;
 };
