@@ -9,7 +9,7 @@ import { userMock } from "./mocks";
 import { addUserService } from "../../components/endpoint/user/endpoints/user-new.spec";
 import { deleteUserByEndpoint } from "../../components/endpoint/user/endpoints/user-delete.spec";
 
-describe.only("Testing User By Extension Service", async () => {
+describe("Testing User By Extension Service", async () => {
 
   let userCreated: any;
 
