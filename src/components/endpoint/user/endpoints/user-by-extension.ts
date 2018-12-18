@@ -29,8 +29,8 @@ export default class UserByExtension implements IEndpoint<Request, {}> {
 
     const userByExtension = await UserByExtensionService(req.parameters.extension).catch(err => err);
 
-    if (!userByExtension) {
-      return errorGenerator(errorMessage.notFound, 400, "UserByExtension");
+    if (!userByExtension || !userByExtension.data.length) {
+      return endpointResponseNormalizer({});
     }
 
     const userById = await UserByIdService(userByExtension.data[0].id).catch(err => err);
