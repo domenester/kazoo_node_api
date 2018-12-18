@@ -21,7 +21,7 @@ export const homeByEndpoint = async () => {
   return response;
 }
 
-describe.only("Testing Server", () => {
+describe("Testing Server", () => {
 
   it("should start server", async () => {
     await server.start();
