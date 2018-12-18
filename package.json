@@ -8,7 +8,7 @@
     "dev": "export NODE_ENV=development && npm run build && copyfiles -u 1 src/public/**/* dist/ && node .",
     "debug": "export NODE_ENV=development && npm run build && node --inspect-brk .",
     "test": "export NODE_ENV=test && mocha -r ts-node/register \"src/**/*.spec.ts\" --recursive --exit",
-    "test-prod": "export NODE_ENV=test-prod && mocha -r ts-node/register src/**/*.spec.ts --exit",
+    "test-prod": "export NODE_ENV=test-prod && mocha -r ts-node/register \"src/**/*.spec.ts\" --recursive --exit",
     "clean": "rm -rf dist",
     "build": "npm run clean && tsc",
     "push": "git add . && git commit -m \"Saving Progress\" && git push"

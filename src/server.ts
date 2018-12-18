@@ -55,7 +55,7 @@ class Server {
             key: fs.readFileSync(serverConfigs.httpsKey),
             cert: fs.readFileSync(serverConfigs.httpsCert)
           }, this.app).listen(this.port, () => {
-            this.logger.info(`Listening to: https://${this.host}:${this.port}`);
+            this.logger.info(`Listening to: ${this.host}:${this.port}`);
           });
         } else {
           // http server for not production
