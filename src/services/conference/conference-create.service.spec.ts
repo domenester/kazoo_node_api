@@ -17,7 +17,7 @@ import { deleteUserByEndpoint } from "../../components/endpoint/user/endpoints/u
 import { ConferenceActionService } from "./conference-action.service";
 import { userMock, userMock2 } from "../user/mocks";
 
-describe.only("Testing Conference Create Service", async () => {
+describe("Testing Conference Create Service", async () => {
 
   let conferenceCreated: any;
   let userCreated: any;
