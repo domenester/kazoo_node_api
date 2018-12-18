@@ -4,6 +4,7 @@ import {default as logger} from "../components/logger/logger";
 import { AuthApiService } from "./auth-api.service";
 import { Verb } from "../components/endpoint/endpoint.interface";
 import { NODE_HOST, NODE_PORT, PROTOCOL } from "../config/env";
+import { sleep } from "../utils/sleep";
 
 export class ServiceTestApi {
 
@@ -46,6 +47,7 @@ export class ServiceTestApi {
         return errorGenerator( err, err.statusCode, stack); 
       }
     });
+    if (process.env.NODE_ENV === "test-prod") { await sleep(1000); }
     if (response instanceof Error) { return response; }
     return response;
   }
