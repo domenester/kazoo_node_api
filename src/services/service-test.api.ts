@@ -3,11 +3,11 @@ import { errorGenerator } from "../components/error";
 import {default as logger} from "../components/logger/logger";
 import { AuthApiService } from "./auth-api.service";
 import { Verb } from "../components/endpoint/endpoint.interface";
-import { NODE_HOST, NODE_PORT } from "../config/env";
+import { NODE_HOST, NODE_PORT, PROTOCOL } from "../config/env";
 
 export class ServiceTestApi {
 
-  private path = `http://${NODE_HOST()}:${NODE_PORT()}`;
+  private path = `${PROTOCOL()}${NODE_HOST()}:${NODE_PORT()}`;
   private fullPath: string;
   private options = async ( method: Verb, body: any = {} ): Promise<request.RequestPromiseOptions> => {
     const options = {
