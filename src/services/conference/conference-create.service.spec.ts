@@ -17,7 +17,7 @@ import { deleteUserByEndpoint } from "../../components/endpoint/user/endpoints/u
 import { ConferenceActionService } from "./conference-action.service";
 import { userMock, userMock2 } from "../user/mocks";
 
-describe("Testing Conference Create Service", async () => {
+describe.only("Testing Conference Create Service", async () => {
 
   let conferenceCreated: any;
   let userCreated: any;
@@ -51,6 +51,7 @@ describe("Testing Conference Create Service", async () => {
     const endpoint = userInvited.id;
     const response = await ConferenceCreateService(endpoint, id);
     expect(response.status).to.be.equal("success");
+    console.log('response', response, JSON.stringify(response));
     conferenceCreated = response.data.endpoint_responses[0];
   });
 

@@ -10,7 +10,7 @@ import { deleteUserByEndpoint } from "../../components/endpoint/user/endpoints/u
 import { ConferenceByIdService } from "./conference-by-id.service";
 import { userMock, userMock2 } from "../user/mocks";
 
-describe("Testing Conference By Id Service", async () => {
+describe.only("Testing Conference By Id Service", async () => {
 
   let conferenceCreated: any;
   let userCreated: any;
