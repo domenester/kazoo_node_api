@@ -12,8 +12,8 @@ class FreeSwitchApi implements IEndpointAPI {
   constructor(logger: winston.Logger) {
     this.logger = logger;
     this.endpoints = [
-      new ClearVideo(this.logger),
-      new SetVideo(this.logger)
+      new ClearVideo(this.logger, this.path),
+      new SetVideo(this.logger, this.path)
     ];
   }
 }

@@ -12,7 +12,7 @@ import { ServiceTestApi } from "../../../../services/service-test.api";
 
 export const setVideoEndpoint = async () => {
   const freeSwitchApi = new FreeSwitchApi(logger);
-  const setVideo = new SetVideo(logger);
+  const setVideo = new SetVideo(logger, freeSwitchApi.path);
   const serviceTestApiInstance = new ServiceTestApi(`${freeSwitchApi.path}/conferenceId/setvideo/memberId`);
   const response = await serviceTestApiInstance.request(
     setVideo.method, {}, {}, "Testing Set Video"

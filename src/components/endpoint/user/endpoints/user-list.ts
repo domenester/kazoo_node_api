@@ -17,7 +17,7 @@ export default class UserList implements IEndpoint<Request, {}> {
     this.fullPath = `${fatherPath}${this.path}`;
   }
   public handler = async (request: IRequest): Promise<HandlerResponse> => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
 
     const usersAndCallflows = await Promise.all([
       UserService.list(),

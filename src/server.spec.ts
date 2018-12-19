@@ -13,7 +13,7 @@ import Home from "./components/endpoint/home/endpoints/home";
 
 export const homeByEndpoint = async () => {
   const homeApi = new HomeApi(logger);
-  const home = new Home(logger);
+  const home = new Home(logger, homeApi.path);
   const serviceTestApiInstance = new ServiceTestApi(`/`);
   const response = await serviceTestApiInstance.request(
     home.method, {}, {}, "Testing Home"

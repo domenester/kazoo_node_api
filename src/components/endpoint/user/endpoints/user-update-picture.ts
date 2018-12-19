@@ -27,7 +27,7 @@ export default class UploadProfilePicture implements IEndpoint<Request, {}> {
     this.fullPath = `${fatherPath}${this.path}`;
   }
   public handler = async (request: IRequest): Promise<HandlerResponse> => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
     const pathSplit = request.body.originalname.split(".");
     if ( imagesFormatsAllowed.indexOf(pathSplit[pathSplit.length - 1]) === -1 ) {
       return errorGenerator(errorMessage.formatInvalid, 400, "UploadProfilePicture");

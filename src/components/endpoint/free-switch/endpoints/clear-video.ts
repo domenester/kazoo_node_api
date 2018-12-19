@@ -9,13 +9,15 @@ import { endpointResponseNormalizer } from "../../../../normalizer";
 export default class ClearVideo implements IEndpoint<Request, {}> {
   public path = "/:conferenceId/clearvideo";
   public method: Verb = "post";
+  public fullPath: string;
   public bodySchema = "";
   private logger: winston.Logger;
-  constructor(logger: winston.Logger) {
+  constructor(logger: winston.Logger, fatherPath: string) {
     this.logger = logger;
+    this.fullPath = `${fatherPath}${this.path}`;
   }
   public handler = async (req: IRequest) => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
 
     const validation = await ClearVideoValidation(req.parameters);
 

@@ -15,7 +15,7 @@ export default class ScheduledConferenceByUser implements IEndpoint<Request, {}>
     this.fullPath = `${fatherPath}${this.path}`;
   }
   public handler = async (req: IRequest) => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
 
     // TODO: Verify the right schema to validate it
     // const validation = await ReportListValidation(req.parameters);

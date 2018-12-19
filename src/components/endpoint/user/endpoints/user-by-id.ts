@@ -20,7 +20,7 @@ export default class UserById implements IEndpoint<Request, {}> {
     this.fullPath = `${fatherPath}${this.path}`;
   }
   public handler = async (req: IRequest): Promise<HandlerResponse> => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
 
     const validation = await UserByIdValidation(req.parameters);
     if (validation instanceof Error) { return validation; }

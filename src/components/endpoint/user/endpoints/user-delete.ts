@@ -19,7 +19,7 @@ export default class UserNew implements IEndpoint<Request, {}> {
     this.fullPath = `${fatherPath}${this.path}`
   }
   public handler = async (req: IRequest): Promise<HandlerResponse> => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
 
     const validation = await UserDeleteValidation(req.parameters);
     if (validation instanceof Error) { return validation; }

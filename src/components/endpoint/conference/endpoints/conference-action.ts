@@ -16,7 +16,7 @@ export default class ConferenceAction implements IEndpoint<Request, {}> {
     this.fullPath = `${fatherPath}${this.path}`;
   }
   public handler = async (req: IRequest) => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
 
     const validation = await ConferenceActionValidation(req.parameters);
 

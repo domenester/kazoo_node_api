@@ -51,9 +51,9 @@ describe("Testing User By Extension", async () => {
     expect(userAdded.devices.length).to.be.equal(1);
   }).timeout(10000);
 
-  it("should return empty array for extension that don't exist", async () => {
+  it("should return empty object for extension that don't exist", async () => {
     const response = await getUserByExtensionService("-123");
-    expect(response.code).to.be.equal(400);
+    expect(response).to.be.deep.equal({});
   }).timeout(4000);
 
   it("should return the user created by extension", async () => {

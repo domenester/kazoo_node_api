@@ -11,7 +11,7 @@ class HomeApi implements IEndpointAPI {
   constructor(logger: winston.Logger) {
     this.logger = logger;
     this.endpoints = [
-      new Home(this.logger),
+      new Home(this.logger, this.path),
     ];
   }
 }

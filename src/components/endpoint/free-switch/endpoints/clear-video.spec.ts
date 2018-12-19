@@ -13,7 +13,7 @@ import { ServiceTestApi } from "../../../../services/service-test.api";
 
 export const clearVideoEndpoint = async () => {
   const freeSwitchApi = new FreeSwitchApi(logger);
-  const clearVideo = new ClearVideo(logger);
+  const clearVideo = new ClearVideo(logger, freeSwitchApi.path);
   const serviceTestApiInstance = new ServiceTestApi(`${freeSwitchApi.path}/conferenceId/clearvideo`);
   const response = await serviceTestApiInstance.request(
     clearVideo.method, {}, {}, "Testing Clear Video"

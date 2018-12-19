@@ -50,7 +50,6 @@ describe("Testing Conference Create Service", async () => {
     // const endpoint = "anyendpointforconference";
     const endpoint = userInvited.id;
     const response = await ConferenceCreateService(endpoint, id);
-    console.log('response', response, JSON.stringify(response));
     expect(response.status).to.be.equal("success");
     conferenceCreated = response.data.endpoint_responses[0];
   });

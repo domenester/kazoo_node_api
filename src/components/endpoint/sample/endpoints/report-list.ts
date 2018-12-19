@@ -13,7 +13,7 @@
 //     this.logger = logger;
 //   }
 //   public handler = async (req: IRequest) => {
-//     this.logger.info(`Accessing path: ${this.path}`);
+//     this.logger.info(`Accessing path: ${this.fullPath}`);
 
 //     const validation = await ReportListValidation(req.parameters);
 

@@ -17,7 +17,7 @@ export default class ConferenceById implements IEndpoint<Request, {}> {
     this.fullPath = `${fatherPath}${this.path}`;
   }
   public handler = async (req: IRequest) => {
-    this.logger.info(`Accessing path: ${this.path}`);
+    this.logger.info(`Accessing path: ${this.fullPath}`);
 
     const validation = await this.bodySchema(req.parameters);
 
