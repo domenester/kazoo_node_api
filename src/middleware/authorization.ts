@@ -23,7 +23,7 @@ export default (req, res, next): NextHandleFunction => {
   ) { return next(); }
 
   const accessToken = req.headers["authorization"];
-  if (!accessToken) { return next(new Error("Token obrigatório.")); }
+  if (!accessToken) { return next(new Error(`Token obrigatório. Acesso negado para url: ${req.url}, verbo: ${req.method}`)); }
   let decoded;
   try {
     decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
