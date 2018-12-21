@@ -43,7 +43,7 @@ export const updatePictureByEndpoint = async (userId: string) => {
   return response;
 }
 
-describe("Testing User Picture Update", async () => {
+describe.only("Testing User Picture Update", async () => {
 
   let userAdded: any;
   before("Starting server...", async () => {

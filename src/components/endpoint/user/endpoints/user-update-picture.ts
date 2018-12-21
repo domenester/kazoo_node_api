@@ -24,18 +24,20 @@ export default class UploadProfilePicture implements IEndpoint<Request, {}> {
   private logger: winston.Logger;
   constructor(logger: winston.Logger, fatherPath: string) {
     this.logger = logger;
-    this.fullPath = `${fatherPath}${this.path}`;
+    this.fullPath = `${this.path}`;
   }
   public handler = async (request: IRequest): Promise<HandlerResponse> => {
+    const file = request.body;
     this.logger.info(`Accessing path: ${this.fullPath}`);
-    const pathSplit = request.body.originalname.split(".");
+    const pathSplit = file.originalname.split(".");
     if ( imagesFormatsAllowed.indexOf(pathSplit[pathSplit.length - 1]) === -1 ) {
       return errorGenerator(errorMessage.formatInvalid, 400, "UploadProfilePicture");
     }
-    const imageName = `${request.body.id}.${pathSplit[pathSplit.length - 1]}`;
+    const userId = request.headers["userid"];
+    const imageName = `${userId}.${pathSplit[pathSplit.length - 1]}`;
     const targetPath = `${pathToUpload()}/${imageName}`;
-    await fsRename(request.body.path, targetPath).catch(err => err);
-
+    console.log(pathToUpload());
+    const fileWrited = fs.writeFileSync(targetPath, file, {encoding: "binary"});
     return endpointResponseNormalizer({data: true}, responseMessages.uploadProfilePicture);
   }
 }
