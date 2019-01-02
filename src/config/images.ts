@@ -9,7 +9,7 @@ export const pathToUpload = () => {
     case "test-prod":
       return "/var/www/html/frontend/photos";
     case "test":
-      return `${process.cwd()}/src`;
+      return `${process.cwd()}/tmp`;
     default: return `${process.cwd()}/dist/public`;
   }
 }

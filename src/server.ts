@@ -18,6 +18,7 @@ import * as multer from "multer";
 import Authorization from "./middleware/authorization";
 import * as jwt from "jsonwebtoken";
 import { NODE_HOST, NODE_PORT } from "./config/env";
+import { pathMulterTempFile } from "./config/files";
 
 const env = process.env;
 dotenv.config({ path: path.join(__dirname, "../.env")});
@@ -93,6 +94,7 @@ class Server {
       }));
 
       this.app.use('/public', express.static(__dirname + '/public'));
+      this.app.use('../tmp', express.static(__dirname + '/public'));
 
       if (middlewares.length > 0) {
         return Promise.resolve( this.app.use(middlewares) );
@@ -103,6 +105,8 @@ class Server {
       switch (path) {
         case serverConfigs.pathsToMulter.avatar:
           return multer({ dest: `${__dirname}/` }).single('File');
+        case serverConfigs.pathsToMulter.file:
+          return multer({ dest: `${pathMulterTempFile()}/` }).single('tmp');
         default: return ((req, res, next) => { next(); }) as express.RequestHandler;
       }
     }

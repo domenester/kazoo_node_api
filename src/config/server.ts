@@ -1,4 +1,5 @@
 import { UploadProfilePicturePath } from "../components/endpoint/user/endpoints/user-update-picture";
+import { UploadFilePath } from "../components/endpoint/files/endpoints/files-upload";
 
 export default {
   token: {
@@ -6,7 +7,8 @@ export default {
     expiresIn: 60 * 10
   },
   pathsToMulter: {
-    avatar: UploadProfilePicturePath
+    avatar: UploadProfilePicturePath,
+    file: UploadFilePath
   },
   publicPath: [
     { path: "/login", method: ["POST"] },
