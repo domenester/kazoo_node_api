@@ -121,7 +121,7 @@ class Server {
         EndpointsApi.map((endpointApiClass) => {
           const endpointApi = new endpointApiClass(this.logger);
           endpointApi.endpoints.map((endpoint) => {
-            const endpointPath = `${endpointApi.path}${endpoint.path}`;
+            const endpointPath = endpoint.fullPath;
             this.app[endpoint.method](
               endpointPath,
               [this.requestMiddleware(endpoint.path), Authorization],
@@ -144,6 +144,7 @@ class Server {
 
               if (result instanceof Error) {
                 const error = result as any;
+                this.logger.error(`Error accessing ${req.url}: ${error}`);
                 return res.status(error.code).send({
                   code: error.code,
                   message: error.message,

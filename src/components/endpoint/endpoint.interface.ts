@@ -8,6 +8,7 @@ export interface IRequest<TBody extends {} = any, THeaders extends {} = any, TPa
 
 export interface IEndpoint<TRequest extends {}, TResult extends {}> {
   path: string;
+  fullPath: string;
   bodySchema: any;
   method: Verb;
   body?: any;
