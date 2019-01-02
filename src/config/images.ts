@@ -3,9 +3,13 @@ export const imagesFormatsAllowed = [
 ];
 
 export const pathToUpload = () => {
-  if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test-prod") {
-    return "/var/www/html/frontend/photos";
-  } else {
-    return `${process.cwd()}/dist/public`
+  switch(process.env.NODE_ENV) {
+    case "production":
+      return "/var/www/html/frontend/photos";
+    case "test-prod":
+      return "/var/www/html/frontend/photos";
+    case "test":
+      return `${process.cwd()}/src`;
+    default: return `${process.cwd()}/dist/public`;
   }
 }

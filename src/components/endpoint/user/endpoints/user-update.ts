@@ -16,7 +16,7 @@ export default class UserUpdate implements IEndpoint<Request, {}> {
   private logger: winston.Logger;
   constructor(logger: winston.Logger, fatherPath: string) {
     this.logger = logger;
-    this.fullPath = `${fatherPath}/`;
+    this.fullPath = `${fatherPath}${this.path}`;
   }
   public handler = async (req: IRequest): Promise<HandlerResponse> => {
     this.logger.info(`Accessing path: ${this.fullPath}`);
