@@ -6,6 +6,6 @@ export const pathToUpload = () => {
   if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "test-prod") {
     return "/var/www/html/frontend/photos";
   } else {
-    return `${__dirname}/../public`
+    return `${process.cwd()}/dist/public`
   }
 }
