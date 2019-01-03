@@ -28,4 +28,5 @@ export interface IUserUpdate {
   department?: string;
   devices?: Array<string>;
   callflow?: string;
+  contactList?: { contacts: Array<string> }
 }
