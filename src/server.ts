@@ -93,8 +93,10 @@ class Server {
         optionsSuccessStatus: 204
       }));
 
-      this.app.use('/public', express.static(__dirname + '/public'));
-      this.app.use('../tmp', express.static(__dirname + '/public'));
+      this.app.use(
+        ['/public', `../tmp`],
+        express.static(__dirname + '/public')
+      );
 
       if (middlewares.length > 0) {
         return Promise.resolve( this.app.use(middlewares) );
@@ -106,7 +108,7 @@ class Server {
         case serverConfigs.pathsToMulter.avatar:
           return multer({ dest: `${__dirname}/` }).single('File');
         case serverConfigs.pathsToMulter.file:
-          return multer({ dest: `${pathMulterTempFile()}/` }).single('tmp');
+          return multer({ dest: `${pathMulterTempFile()}/` }).single('File');
         default: return ((req, res, next) => { next(); }) as express.RequestHandler;
       }
     }

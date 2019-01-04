@@ -4,9 +4,9 @@
   "description": "",
   "main": "dist/main.js",
   "scripts": {
-    "start": "if [ ! -d '/node_modules' ]; then npm i; export NODE_ENV=production && npm run build && pm2 start process.yml; fi",
-    "dev": "export NODE_ENV=development && npm run build && copyfiles -u 1 src/public/**/* dist/ && node .",
-    "debug": "export NODE_ENV=development && npm run build && copyfiles -u 1 src/public/**/* dist/ && node --inspect-brk .",
+    "start": "if [ ! -d '/node_modules' ]; then npm i; export NODE_ENV=production && npm run build && copyfiles -u 1 \"./../images/*\" dist/public/ && copyfiles -u 1 src/public/**/* dist/ && pm2 start process.yml; fi",
+    "dev": "export NODE_ENV=development && npm run build && copyfiles -u 1 \"./../images/*\" dist/public/ && copyfiles -u 1 src/public/**/* dist/ && node .",
+    "debug": "export NODE_ENV=development && npm run build && copyfiles -u 1 \"./../images/*\" dist/public/ && copyfiles -u 1 src/public/**/* dist/ && node --inspect-brk .",
     "test": "export NODE_ENV=test && mocha -r ts-node/register \"src/**/*.spec.ts\" --recursive --exit",
     "test-prod": "export NODE_ENV=test-prod && mocha -r ts-node/register \"src/**/*.spec.ts\" --recursive --exit",
     "clean": "rm -rf dist",
@@ -36,6 +36,7 @@
     "@types/request": "^2.47.1",
     "@types/request-promise": "^4.1.42",
     "@types/sequelize": "^4.27.30",
+    "@types/uuid": "^3.4.4",
     "@types/winston": "^2.3.9",
     "acl": "^0.4.11",
     "body-parser": "^1.18.3",
@@ -59,6 +60,7 @@
     "sequelize": "^4.41.0",
     "ts-node": "^7.0.1",
     "typescript": "^2.9.1",
+    "uuid": "^3.3.2",
     "winston": "^3.0.0"
   }
 }
