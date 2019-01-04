@@ -106,7 +106,7 @@ class Server {
     private requestMiddleware(path: string): express.RequestHandler {
       switch (path) {
         case serverConfigs.pathsToMulter.avatar:
-          return multer({ dest: `${__dirname}/` }).single('File');
+          return multer({ dest: `${pathMulterTempFile()}/` }).single('File');
         case serverConfigs.pathsToMulter.file:
           return multer({ dest: `${pathMulterTempFile()}/` }).single('File');
         default: return ((req, res, next) => { next(); }) as express.RequestHandler;

@@ -41,12 +41,7 @@ export default class UploadProfilePicture implements IEndpoint<Request, {}> {
     const userId = request.headers["userid"];
     const imageName = `${userId}.${pathSplit[pathSplit.length - 1]}`;
     const targetPath = `${pathToUpload()}/${imageName}`;
-    let path = '';
-    if (process.env.NODE_ENV !== "test") {
-      path = `${process.cwd()}/dist/${file.filename}`;
-    } else {
-      path = `${process.cwd()}/src/${file.filename}`;
-    }
+    let path = `${pathToUpload()}/${file.filename}`;
     const fileTemp = await fs.readFile(path);
     await fs.writeFile(targetPath, fileTemp, {encoding: "binary"});
 

@@ -8,8 +8,6 @@ export const pathToUpload = () => {
       return "/var/www/html/frontend/photos";
     case "test-prod":
       return "/var/www/html/frontend/photos";
-    case "test":
-      return `${process.cwd()}/tmp`;
-    default: return `${process.cwd()}/dist/public`;
+    default: return `${process.cwd()}/tmp`;
   }
 }
