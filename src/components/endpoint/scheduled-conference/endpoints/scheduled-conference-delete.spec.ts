@@ -14,7 +14,7 @@ export const scheduleConfDeleteByEndpoint = async (conferenceId: string) => {
   const scheduledConferenceApi = new ScheduledConferenceApi(logger);
   const scheduledConfereneDelete = new ScheduledConfereneDelete(logger, scheduledConferenceApi.path);
   const serviceTestApiInstance = new ServiceTestApi(
-    `${scheduledConferenceApi.path}/conferences/${conferenceId}`
+    `${scheduledConferenceApi.path}/${conferenceId}`
   );
   const response = await serviceTestApiInstance.request(
     scheduledConfereneDelete.method, {}, {}, "Testing Schedule Conference Delete"
@@ -40,5 +40,5 @@ describe("Testing Schedule Conference Delete", async () => {
       scheduledConferenceCreated.id
     ).catch(err => err);
     expect(response).to.be.equal(1);
-  });
+  }).timeout(4000);
 });

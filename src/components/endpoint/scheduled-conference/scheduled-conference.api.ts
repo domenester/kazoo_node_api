@@ -7,6 +7,7 @@ import ScheduledConferenceList from "./endpoints/scheduled-conference-list";
 import ScheduledConferenceById from "./endpoints/scheduled-conference-by-id";
 import ScheduledConferenceByUser from "./endpoints/scheduled-conference-by-user";
 import ScheduledConferenceDelete from "./endpoints/scheduled-conference-delete";
+import ScheduledConferenceUpdate from "./endpoints/scheduled-conference-update";
 
 class ScheduledConferenceApi implements IEndpointAPI {
   public path = "/scheduled_conferences";
@@ -19,7 +20,8 @@ class ScheduledConferenceApi implements IEndpointAPI {
       new ScheduledConferenceList(this.logger, this.path),
       new ScheduledConferenceById(this.logger, this.path),
       new ScheduledConferenceByUser(this.logger, this.path),
-      new ScheduledConferenceDelete(this.logger, this.path)
+      new ScheduledConferenceDelete(this.logger, this.path),
+      new ScheduledConferenceUpdate(this.logger, this.path)
     ];
   }
 }
