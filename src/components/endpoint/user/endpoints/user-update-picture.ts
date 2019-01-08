@@ -5,12 +5,10 @@ import { imagesFormatsAllowed, pathToUpload } from "../../../../config/images";
 import { updateUserPicture as errorMessage } from "../../../error/error-messages";
 import * as fs from "fs-extra";
 import { promisify } from "util";
-import * as path from "path";
-import { UserService } from "../../../../services";
-import { UserProfilePictureValidation } from "../validations/user-profile-picture.validation";
 import responseMessages from "../../../../config/endpoints-response-messages";
 import { errorGenerator } from "../../../error";
 import { endpointResponseNormalizer } from "../../../../normalizer";
+import { pathToUploadFiles, pathToUploadFilesPublic, pathMulterTempFile } from "../../../../config/files";
 
 const fsRename = promisify(fs.rename);
 
@@ -40,10 +38,17 @@ export default class UploadProfilePicture implements IEndpoint<Request, {}> {
 
     const userId = request.headers["userid"];
     const imageName = `${userId}.${pathSplit[pathSplit.length - 1]}`;
-    const targetPath = `${pathToUpload()}/${imageName}`;
-    let path = `${pathToUpload()}/${file.filename}`;
+
+    const targetPath = `${pathToUploadFiles()}/${imageName}`;
+    const targetPathPublic = `${pathToUploadFilesPublic()}/${imageName}`;
+
+    let path = `${pathMulterTempFile()}/${file.filename}`;
     const fileTemp = await fs.readFile(path);
-    await fs.writeFile(targetPath, fileTemp, {encoding: "binary"});
+
+    Promise.all([
+      fs.writeFile(targetPath, fileTemp, {encoding: "binary"}),
+      fs.writeFile(targetPathPublic, fileTemp, {encoding: "binary"})
+    ]).catch(err => err);
 
     return endpointResponseNormalizer({data: true}, responseMessages.uploadProfilePicture);
   }
