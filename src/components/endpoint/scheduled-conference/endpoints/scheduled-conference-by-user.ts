@@ -21,7 +21,7 @@ export default class ScheduledConferenceByUser implements IEndpoint<Request, {}>
     // const validation = await ReportListValidation(req.parameters);
     // if (validation instanceof Error) { return validation; }
 
-    const response = await ScheduledConfByUserService(req.parameters.userId);
+    const response = await ScheduledConfByUserService(req.parameters.user);
     if (response instanceof Error) { return response; }
 
     return endpointResponseNormalizer(response);

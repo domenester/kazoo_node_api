@@ -8,6 +8,6 @@ export const UserNew = async (userNew: IUserNew): Promise<any> => {
   const serviceApiInstance = serviceApi(location);
   const response = await serviceApiInstance.request(
     "put", userNewNormalized(userNew), {}, "UserNew"
-  );
+  ).catch(err => err);
   return response;
 };
