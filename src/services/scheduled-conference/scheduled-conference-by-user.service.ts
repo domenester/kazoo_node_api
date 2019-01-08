@@ -5,7 +5,7 @@ export const ScheduledConfByUserService = async (username: string): Promise<any>
   const location = `/conferences?user=${username}`;
   const serviceApiInstance = serviceApi(location, path);
   const response = await serviceApiInstance.request(
-    "post", {}, {}, "ScheduledConfByUserService"
+    "get", {}, {}, "ScheduledConfByUserService"
   );
   return response;
 };

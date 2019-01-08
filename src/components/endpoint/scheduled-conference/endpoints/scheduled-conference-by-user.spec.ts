@@ -17,7 +17,7 @@ export const scheduleConfByUserByEndpoint = async (username: string) => {
   const scheduledConferenceApi = new ScheduledConferenceApi(logger);
   const scheduledConfereneByUser = new ScheduledConfereneByUser(logger, scheduledConferenceApi.path);
   const serviceTestApiInstance = new ServiceTestApi(
-    `${scheduledConferenceApi.path}?user=${username}`
+    `${scheduledConferenceApi.path}/${username}`
   );
   const response = await serviceTestApiInstance.request(
     scheduledConfereneByUser.method, {}, {}, "Testing Schedule Conference By User"

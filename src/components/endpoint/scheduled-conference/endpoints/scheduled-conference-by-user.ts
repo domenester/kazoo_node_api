@@ -5,9 +5,9 @@ import { ScheduledConfByUserService } from "../../../../services";
 import { endpointResponseNormalizer } from "../../../../normalizer";
 
 export default class ScheduledConferenceByUser implements IEndpoint<Request, {}> {
-  public path = "";
+  public path = "/:user";
   public fullPath: string;
-  public method: Verb = "post";
+  public method: Verb = "get";
   public bodySchema = "";
   private logger: winston.Logger;
   constructor(logger: winston.Logger, fatherPath: string) {
