@@ -1,7 +1,3 @@
-import * as request from "request-promise";
-import { errorGenerator, login as errorMessage } from "../../components/error";
-import {default as logger} from "../../components/logger/logger";
-import { AuthApiService } from "../auth-api.service";
 import { serviceApi } from "../service.api";
 
 export const UserByDepartmentService = async (department: string): Promise<any> => {

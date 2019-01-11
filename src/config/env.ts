@@ -42,3 +42,14 @@ export const NODE_PORT = () => {
       return +process.env.NODE_PORT;
   }
 }
+
+export const FRONTEND_BACKOFFICE_URL = () => {
+  switch(process.env.NODE_ENV) {
+    case "production":
+      return process.env.FRONTEND_BACKOFFICE_URL;
+    case "test-prod":
+      return process.env.FRONTEND_BACKOFFICE_URL;
+    default:
+      return process.env.FRONTEND_BACKOFFICE_URL_LOCAL;
+  }
+}

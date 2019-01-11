@@ -2,19 +2,12 @@
 
 import { expect } from "chai";
 import "mocha";
-import * as request from "request-promise";
-import { promisify } from "util";
 import {default as logger} from "../../../../components/logger/logger";
 import server from "../../../../server";
 import UserAddContact from "./user-add-contact";
 import UserApi from "../user.api";
-import { NODE_HOST, NODE_PORT } from "../../../../config/env";
 import { IUserNew } from "../../../../interfaces";
-import { UserNew } from "../../../../services/user/user-new.service";
-import { UserDeleteService } from "../../../../services/user/user-delete.service";
 import { addUserService } from "./user-new.spec";
-import { DeviceDeleteService } from "../../../../services/device/device-delete.service";
-import { CallflowDeleteService } from "../../../../services";
 import { userMock, userMock2 } from "../../../../services/user/mocks";
 import { ServiceTestApi } from "../../../../services/service-test.api";
 import { deleteUserByEndpoint } from "./user-delete.spec";

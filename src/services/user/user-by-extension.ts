@@ -1,7 +1,4 @@
-import * as request from "request-promise";
-import { errorGenerator, login as errorMessage } from "../../components/error";
-import {default as logger} from "../../components/logger/logger";
-import { AuthApiService } from "../auth-api.service";
+
 import { CallflowListService } from "../callflow";
 import { UserByUsernameService } from "./user-by-username";
 

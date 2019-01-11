@@ -10,7 +10,8 @@ const UserUpdateSchema = {
   extension: joi.string().optional().regex(/^\d+$/).required().max(10).error(validationErrorFunction),
   email: joi.string().optional().email().max(255).error(validationErrorFunction),
   department: joi.string().optional().max(100).error(validationErrorFunction),
-  profile: joi.string().optional().valid(enums.perfil.values).error(validationErrorFunction)
+  profile: joi.string().optional().error(validationErrorFunction)
+  //profile: joi.string().optional().valid(enums.perfil.values).error(validationErrorFunction)
 };
 
 export const UserUpdateValidation = ( body: any ) => {
