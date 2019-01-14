@@ -12,7 +12,7 @@ import MessageList from "./message-list";
 import MessageApi from "../message.api";
 import { NODE_HOST, NODE_PORT, PROTOCOL } from "../../../../config/env";
 
-describe.only("Testing Messages", async () => {
+describe("Testing Messages", async () => {
 
   const env = process.env;
   const messageApi = new MessageApi(logger);

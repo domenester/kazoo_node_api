@@ -24,7 +24,7 @@ describe("Testing Report Enums", async () => {
   it("should return report enums", async () => {
     const env = process.env;
     const reportApi = new ReportApi(logger);
-    const reportEnums = new ReportEnums(logger);
+    const reportEnums = new ReportEnums(logger, reportApi.path);
 
     let response = await request(
       `${PROTOCOL()}${NODE_HOST()}:${NODE_PORT()}${reportApi.path}${reportEnums.path}`,

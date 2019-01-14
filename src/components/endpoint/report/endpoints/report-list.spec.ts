@@ -12,7 +12,7 @@ import { LogAccessInstance, LogCallInstance, LogConferenceInstance, LogConferenc
 import { DATABASE_URI } from "../../../../database/utils/postgree";
 import { NODE_HOST, NODE_PORT, PROTOCOL } from "../../../../config/env";
 
-describe.only("Testing Reports", async () => {
+describe("Testing Reports", async () => {
 
   const env = process.env;
   const reportApi = new ReportApi(logger);

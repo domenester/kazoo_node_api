@@ -28,7 +28,7 @@ export const getUserByExtensionService = async (extension: string) => {
   return response;
 }
 
-describe("Testing User By Extension", async () => {
+describe.only("Testing User By Extension", async () => {
 
   let userAdded: any;
   
