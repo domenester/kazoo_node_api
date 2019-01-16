@@ -14,7 +14,7 @@ import { deleteUserByEndpoint } from "./user-delete.spec";
 export const updateUserByEndpoint = async (body: any) => {
   const userApi = new UserApi(logger);
   const userUpdate = new UserUpdate(logger, userApi.path);
-  const serviceTestApiInstance = new ServiceTestApi(`${userUpdate.fullPath}${body.id}`);
+  const serviceTestApiInstance = new ServiceTestApi(`${userApi.path}/${body.id}`);
   const response = await serviceTestApiInstance.request(
     userUpdate.method, body, {}, "Testing User Update"
   ).catch(err => err);
