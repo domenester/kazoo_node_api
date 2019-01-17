@@ -113,9 +113,11 @@ class Server {
       }
     }
 
-    private refreshToken() {
+    private refreshToken(origin: string) {
       return jwt.sign(
-        { key: process.env.JWT_SECRET }, process.env.JWT_SECRET, { expiresIn: serverConfigs.token.expiresIn },
+        { key: process.env.JWT_SECRET },
+        process.env.JWT_SECRET,
+        { expiresIn: serverConfigs.token.expiresIn(origin) },
       );
     }
 
@@ -133,7 +135,7 @@ class Server {
               [this.requestMiddleware(endpoint.path), Authorization],
               async (req, res) => {
 
-              res.setHeader("Authorization", this.refreshToken());
+              res.setHeader("Authorization", this.refreshToken(req.headers.origin));
               
               if ( (endpoint.method === "post" || endpoint.method === "put") && !req.body) {
                 // tslint:disable-next-line:max-line-length

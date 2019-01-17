@@ -3,8 +3,14 @@ import { UploadFilePath } from "../components/endpoint/files/endpoints/files-upl
 
 export default {
   token: {
-    // 10 minutes
-    expiresIn: 60 * 10
+    // 6 * 10 = 10 minutes
+    expiresIn: (origin: string) => {
+      const env = process.env;
+      switch(origin) {
+        case env.FRONTEND_EPICALL_URL: return (((((60 * 10) * 6 ) * 24 ) * 7) );
+        default: return 60 * 10;
+      }
+    }
   },
   pathsToMulter: {
     avatar: UploadProfilePicturePath,
