@@ -20,7 +20,7 @@ export const messagesByEndpoint = async () => {
   return response;
 }
 
-describe.only("Testing Messages", async () => {
+describe("Testing Messages", async () => {
 
   it("Starting server...", async () => {
     await server.start();

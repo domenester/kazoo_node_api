@@ -22,7 +22,7 @@ export const reportEnumsByEndpoint = async () => {
   return response;
 }
 
-describe.only("Testing Report Enums", async () => {
+describe("Testing Report Enums", async () => {
 
   it("Starting server...", async () => {
     await server.start();

@@ -21,7 +21,7 @@ export const userEnumsByEndpoint = async () => {
   return response;
 }
 
-describe.only("Testing Users Enums", async () => {
+describe("Testing Users Enums", async () => {
 
   it("Starting server...", async () => {
     await server.start();
