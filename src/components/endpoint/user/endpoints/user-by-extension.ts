@@ -25,7 +25,6 @@ export default class UserByExtension implements IEndpoint<Request, {}> {
     if (validation instanceof Error) { return validation; }
 
     const userByExtension = await UserByExtensionService(req.parameters.extension).catch(err => err);
-
     if (!userByExtension || !userByExtension.data.length) {
       return endpointResponseNormalizer({});
     }

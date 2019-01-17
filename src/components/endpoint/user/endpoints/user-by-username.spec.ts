@@ -40,14 +40,14 @@ describe("Testing User By Username", async () => {
     expect(userAdded.devices.length).to.be.equal(1);
   }).timeout(10000);
 
-  it("should return empty array for username that don't exist", async () => {
+  it("should return empty object for username that don't exist", async () => {
     let response = await getUserByUsernameByEndpoint("anyemail@mock.z");
-    expect(response.length).to.be.equal(0);
+    expect(response).to.be.deep.equal({});
   }).timeout(4000);
 
   it("should return the user created by username", async () => {
     let response = await getUserByUsernameByEndpoint(userAdded.username);
-    expect(response.length).to.be.gte(1);
+    expect(response.username).to.be.equal(userAdded.username);
   }).timeout(4000);
 
   it("should remove user, device and callflow added", async () => {

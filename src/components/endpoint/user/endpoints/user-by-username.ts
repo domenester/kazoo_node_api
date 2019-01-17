@@ -50,6 +50,6 @@ export default class UserByUsername implements IEndpoint<Request, {}> {
       users.push( (user as any).data );
     })
 
-    return endpointResponseNormalizer(users, responseMessages.userList);
+    return endpointResponseNormalizer(users[0] || {});
   }
 }
