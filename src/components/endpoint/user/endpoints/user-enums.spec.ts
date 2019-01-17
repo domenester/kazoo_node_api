@@ -9,8 +9,19 @@ import UserEnums from "./user-enums";
 import UserApi from "../user.api";
 import enums from "../enums";
 import { NODE_HOST, NODE_PORT, PROTOCOL } from "../../../../config/env";
+import { ServiceTestApi } from "../../../../services/service-test.api";
 
-describe("Testing Users Enums", async () => {
+export const userEnumsByEndpoint = async () => {
+  const userApi = new UserApi(logger);
+  const userEnums = new UserEnums(logger, userApi.path);
+  const serviceTestApiInstance = new ServiceTestApi(userEnums.fullPath);
+  const response = await serviceTestApiInstance.request(
+    userEnums.method, {}, {}, "Testing User Enums"
+  );
+  return response;
+}
+
+describe.only("Testing Users Enums", async () => {
 
   it("Starting server...", async () => {
     await server.start();
@@ -21,15 +32,7 @@ describe("Testing Users Enums", async () => {
   });
 
   it("should return user enums", async () => {
-    const userApi = new UserApi(logger);
-    const userEnums = new UserEnums(logger, userApi.path);
-    const url = `${PROTOCOL()}${NODE_HOST()}:${NODE_PORT()}${userEnums.fullPath}`;
-    let response = await request( url,
-      {
-        method: userEnums.method
-      },
-    );
-    response = JSON.parse(response);
+    const response = await userEnumsByEndpoint();
     expect(response.data).to.be.deep.equal(enums);
   });
 });
