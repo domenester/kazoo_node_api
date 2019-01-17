@@ -28,7 +28,7 @@ export const getUserByExtensionService = async (extension: string) => {
   return response;
 }
 
-describe.only("Testing User By Extension", async () => {
+describe("Testing User By Extension", async () => {
 
   let userAdded: any;
   
@@ -59,7 +59,7 @@ describe.only("Testing User By Extension", async () => {
   it("should return the user created by extension", async () => {
     const response = await getUserByExtensionService(userMock.extension);
     expect(response.id).to.be.equal(userAdded.id);
-  }).timeout(4000);
+  }).timeout(10000);
 
   it("should remove user, device and callflow added", async () => {
     const userResponse = await UserDeleteService(userAdded.id);

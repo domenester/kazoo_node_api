@@ -4,9 +4,6 @@ import {IEndpoint, IRequest, Verb, HandlerResponse} from "../../../endpoint/endp
 import responseMessages from "../../../../config/endpoints-response-messages";
 import { UserByExtensionValidation } from "../validations/user-by-extension.validation";
 import { CallflowByIdService } from "../../../../services/callflow/callflow-by-id.service";
-import { UserByDepartmentService } from "../../../../services/user/user-by-department";
-import { errorGenerator } from "../../../error/error";
-import { user as errorMessage } from "../../../error/error-messages";
 import { UserByIdService } from "../../../../services/user/user-by-id.service";
 import { UserByExtensionService } from "../../../../services/user/user-by-extension";
 import { endpointResponseNormalizer } from "../../../../normalizer";
