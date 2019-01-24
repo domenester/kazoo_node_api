@@ -30,9 +30,12 @@ export default class UserAddContact implements IEndpoint<Request, {}> {
     const userById = await UserByIdService(req.parameters.id).catch(err => err);
     let userData = userById.data;
     let hasContactInList = false;
+    
+    const userContactById = await UserByIdService(req.body.id).catch(err => err);
+    let userContactData = userContactById.data;
 
     if ( Object.keys(userData.contact_list).length === 0 || !userData.contact_list.contacts ) {
-      userData.contact_list = { contacts: [] };
+      userData.contact_list = { contacts: [], contactsFrom: [] };
     } else {
       userData.contact_list.contacts.map( c => {
         if (req.body.username === c.username) {
@@ -41,15 +44,33 @@ export default class UserAddContact implements IEndpoint<Request, {}> {
       });
     }
 
+    if ( Object.keys(userContactData.contact_list).length === 0) {
+      userContactData.contact_list = { contacts: [], contactsFrom: [] };
+    } else if (!userContactData.contact_list.contactsFrom) {
+      userContactData.contact_list.contactsFrom = [];
+    }
+
     if ( !hasContactInList ) {
-      userData.contact_list.contacts.push(
-        userContactsNormalized(req.body)
-      );
+      userData.contact_list.contacts.push(userContactData);
+      
+      if (!userContactData.contact_list.contactsFrom.includes(userData.id)) {
+        userContactData.contact_list.contactsFrom.push(userData.id);
+      }
+
+      const msgError = "Erro ao adicionar usuário em lista de contatos";
       const userUpdated = await UserUpdateService({
         id: userData.id,
         contactList: userData.contact_list
       }).catch(err => {
-        this.logger.error("Erro ao adicionar usuário em lista de contatos");
+        this.logger.error(msgError);
+        return err;
+      });
+
+      await UserUpdateService({
+        id: userContactData.id,
+        contactList: userContactData.contact_list
+      }).catch(err => {
+        this.logger.error(msgError);
         return err;
       });
       return endpointResponseNormalizer( userUpdated.data , responseMessages.userContactAdded);
