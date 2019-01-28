@@ -5,7 +5,7 @@ import { AuthApiService } from "../auth-api.service";
 import { serviceApi } from "../service.api";
 
 export const UserListService = async (): Promise<any> => {
-  const location = "/users";
+  const location = "/users?paginate=false";
   const serviceApiInstance = serviceApi(location);
   const response = await serviceApiInstance.request(
     "get", {}, {}, "UserListService"
