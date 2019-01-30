@@ -57,7 +57,7 @@ describe("Testing User Update Password", async () => {
       newPassword: "anypassword"
     }
     let response = await resetPasswordByEndpoint(userCreated.id, body);
-    expect(response.code).to.be.equal(401);
+    expect(response.code).to.be.equal(400);
   }).timeout(4000);
 
   it("should update user and devices password", async () => {
