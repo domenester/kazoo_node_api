@@ -1,8 +1,10 @@
 export const usersWithExtension = (users: Array<any>, callflows: Array<any>) => {
+  let callflowsToHandle = [ ...callflows ];
   return users.map( user => {
-    for (var i = 0; i < callflows.length; i++) {
-      if (callflows[i]["numbers"].indexOf(user.username) > -1) {
-        user["extension"] = callflows[i]["numbers"][1];
+    for (let i = 0; i < callflowsToHandle.length; i++) {
+      if (callflowsToHandle[i]["numbers"][0] === user.username) {
+        user["extension"] = callflowsToHandle[i]["numbers"][1];
+        callflowsToHandle.splice(i, 1);
         break;
       }
     }

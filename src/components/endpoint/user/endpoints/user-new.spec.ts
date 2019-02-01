@@ -15,6 +15,7 @@ import { DeviceDeleteService } from "../../../../services/device/device-delete.s
 import { CallflowDeleteService } from "../../../../services/callflow/callflow-delete.service";
 import { serviceTestApi, ServiceTestApi } from "../../../../services/service-test.api";
 import { deleteUserByEndpoint } from "./user-delete.spec";
+import { userMock } from "../../../../services/user/mocks";
 
 export const createNewUserByEndpoint = async (body: IUserNew) => {
   let response = await addUserService(body).catch(err => err);
@@ -120,13 +121,7 @@ describe("Testing User New", async () => {
 
   it("should add new user", async () => {
 
-    const body: IUserNew = {
-      name: "Valid Name",
-      racf: "useradd",
-      extension: "12345",
-      email: "validemail@valid.com",
-      department: "Valid department",
-    };
+    const body: IUserNew = userMock;
 
     let response = await addUserService(body).catch(err => err);
     

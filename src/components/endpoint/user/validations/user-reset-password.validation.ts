@@ -5,7 +5,8 @@ import enums from "../enums";
 
 const UserResetPasswordSchema = {
   newPassword: joi.string().required().disallow([joi.ref("password")]).error(validationErrorFunction),
-  email: joi.string().required().error(validationErrorFunction)
+  email: joi.string().optional().error(validationErrorFunction),
+  token: joi.string().required().error(validationErrorFunction)
 };
 
 export const UserResetPasswordValidation = ( body: any ) => {

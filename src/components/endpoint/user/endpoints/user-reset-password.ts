@@ -9,6 +9,8 @@ import { DeviceGetByOwnerService, DeviceUpdateService } from "../../../../servic
 import { deviceUpdatePasswordNormalized } from "../../../../normalizer/device/device-update-password.normalizer";
 import { UserResetPasswordValidation } from "../validations/user-reset-password.validation";
 import { endpointResponseNormalizer } from "../../../../normalizer";
+import JwtHandler from "../../../../utils/jwt-handle";
+import * as jwt from "jsonwebtoken";
 
 export default class UserResetPassword implements IEndpoint<Request, {}> {
   public path = "/reset_password";
@@ -29,7 +31,17 @@ export default class UserResetPassword implements IEndpoint<Request, {}> {
       return validation;
     }
 
-    let userByEmail = await UserService.getByEmail(req.body.email);
+    let decoded: any; 
+    
+    try {
+      decoded = jwt.verify(req.body.token, process.env.JWT_SECRET);
+    } catch (err) {
+      return errorGenerator(
+        JwtHandler(err.message), 400, err.name,
+      )
+    }
+
+    let userByEmail = await UserService.getByEmail(decoded.email);
 
     if (userByEmail.data.length < 1) {
       return errorGenerator( errorMessage.byEmail, 400, "UserResetPassword");

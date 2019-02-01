@@ -2,20 +2,12 @@
 
 import { expect } from "chai";
 import "mocha";
-import * as request from "request-promise";
-import { promisify } from "util";
 import {default as logger} from "../../../../components/logger/logger";
 import server from "../../../../server";
-import { login as errorMessages, user } from "../../../error/error-messages";
-import { IRequest } from "../../endpoint.interface";
 import UploadProfilePicture from "./user-update-picture";
 import UserApi from "../user.api";
-import { NODE_HOST, NODE_PORT } from "../../../../config/env";
 import { IUserNew } from "../../../../interfaces";
 import { addUserService } from "./user-new.spec";
-import { UserDeleteService } from "../../../../services/user/user-delete.service";
-import { DeviceDeleteService } from "../../../../services/device";
-import { CallflowDeleteService } from "../../../../services";
 import * as fs from "fs";
 import { userMock } from "../../../../services/user/mocks";
 import { ServiceTestApi } from "../../../../services/service-test.api";

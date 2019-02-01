@@ -13,6 +13,9 @@ import UserByDepartment from "./endpoints/user-by-department";
 import UploadProfilePicture from "./endpoints/user-update-picture";
 import UserByExtension from "./endpoints/user-by-extension";
 import UserByEmail from "./endpoints/user-by-email";
+import UserAddContact from "./endpoints/user-add-contact";
+import UserByUsername from "./endpoints/user-by-username";
+import UserEnums from "./endpoints/user-enums";
 
 class UserApi implements IEndpointAPI {
   public path = "/users";
@@ -23,6 +26,7 @@ class UserApi implements IEndpointAPI {
     this.endpoints = [
       new UploadProfilePicture(this.logger, this.path),
       new UserNew(this.logger, this.path),
+      new UserEnums(this.logger, this.path),
       new UserById(this.logger, this.path),
       new UserDelete(this.logger, this.path),
       new UserList(this.logger, this.path),
@@ -31,7 +35,9 @@ class UserApi implements IEndpointAPI {
       new UserUpdate(this.logger, this.path),
       new UserByDepartment(this.logger, this.path),
       new UserByExtension(this.logger, this.path),
-      new UserByEmail(this.logger, this.path)
+      new UserByEmail(this.logger, this.path),
+      new UserAddContact(this.logger, this.path),
+      new UserByUsername(this.logger, this.path)
     ];
   }
 }

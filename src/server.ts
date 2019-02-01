@@ -18,6 +18,7 @@ import * as multer from "multer";
 import Authorization from "./middleware/authorization";
 import * as jwt from "jsonwebtoken";
 import { NODE_HOST, NODE_PORT } from "./config/env";
+import { pathMulterTempFile } from "./config/files";
 
 const env = process.env;
 dotenv.config({ path: path.join(__dirname, "../.env")});
@@ -92,7 +93,10 @@ class Server {
         optionsSuccessStatus: 204
       }));
 
-      this.app.use('/public', express.static(__dirname + '/public'));
+      this.app.use(
+        ['/public', `../tmp`],
+        express.static(__dirname + '/public')
+      );
 
       if (middlewares.length > 0) {
         return Promise.resolve( this.app.use(middlewares) );
@@ -102,14 +106,18 @@ class Server {
     private requestMiddleware(path: string): express.RequestHandler {
       switch (path) {
         case serverConfigs.pathsToMulter.avatar:
-          return multer({ dest: `${__dirname}/` }).single('File');
+          return multer({ dest: `${pathMulterTempFile()}/` }).single('File');
+        case serverConfigs.pathsToMulter.file:
+          return multer({ dest: `${pathMulterTempFile()}/` }).single('File');
         default: return ((req, res, next) => { next(); }) as express.RequestHandler;
       }
     }
 
-    private refreshToken() {
+    private refreshToken(origin: string) {
       return jwt.sign(
-        { key: process.env.JWT_SECRET }, process.env.JWT_SECRET, { expiresIn: serverConfigs.token.expiresIn },
+        { key: process.env.JWT_SECRET },
+        process.env.JWT_SECRET,
+        { expiresIn: serverConfigs.token.expiresIn(origin) },
       );
     }
 
@@ -121,13 +129,13 @@ class Server {
         EndpointsApi.map((endpointApiClass) => {
           const endpointApi = new endpointApiClass(this.logger);
           endpointApi.endpoints.map((endpoint) => {
-            const endpointPath = `${endpointApi.path}${endpoint.path}`;
+            const endpointPath = endpoint.fullPath;
             this.app[endpoint.method](
               endpointPath,
               [this.requestMiddleware(endpoint.path), Authorization],
               async (req, res) => {
 
-              res.setHeader("Authorization", this.refreshToken());
+              res.setHeader("Authorization", this.refreshToken(req.headers.origin));
               
               if ( (endpoint.method === "post" || endpoint.method === "put") && !req.body) {
                 // tslint:disable-next-line:max-line-length
@@ -144,6 +152,7 @@ class Server {
 
               if (result instanceof Error) {
                 const error = result as any;
+                this.logger.error(`Error accessing ${req.url}: ${error}`);
                 return res.status(error.code).send({
                   code: error.code,
                   message: error.message,

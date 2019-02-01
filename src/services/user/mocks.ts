@@ -15,3 +15,11 @@ export const userMock2: IUserNew = {
   extension: "9998",
   name: "User Mock"
 };
+
+export const userMock3: IUserNew = {
+  racf: "usermock3",
+  department: "department",
+  email: "usermock3@mock.com",
+  extension: "9997",
+  name: "User Mock"
+};

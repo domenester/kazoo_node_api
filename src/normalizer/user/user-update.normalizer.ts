@@ -9,5 +9,6 @@ export const userUpdateNormalized = (user: IUserUpdate) => {
   if (user.department) { userToUpdate.data.last_name = user.department; }
   if (user.devices) { userToUpdate.data.devices = user.devices; }
   if (user.callflow) { userToUpdate.data.callflow = user.callflow; }
+  if (user.contactList) { userToUpdate.data.contact_list = user.contactList; }
   return userToUpdate;
 };

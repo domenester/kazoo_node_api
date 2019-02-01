@@ -21,7 +21,7 @@ export const resetPassword = {
 };
 
 export const updateUserPicture = {
-  formatInvalid: "Format de imagem inválido"
+  formatInvalid: "Formato de imagem inválido"
 }
 
 export default {

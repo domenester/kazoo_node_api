@@ -17,8 +17,7 @@ export const AuthApiService = async (): Promise<any> => {
       method: "PUT",
       rejectUnauthorized: false,
     },
-  ).then(res => JSON.parse(res)["auth_token"])
-  .catch( (err) => {
+  ).then(res => JSON.parse(res)["auth_token"]).catch( (err) => {
     logger.error(`Error requesting for: ${path}`);
     return errorGenerator(
       errorMessage.unauthorized,

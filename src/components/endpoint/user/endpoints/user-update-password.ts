@@ -35,7 +35,7 @@ export default class UserUpdatePassword implements IEndpoint<Request, {}> {
     });
 
     if (loginResponse.status !== "success") {
-      return errorGenerator( errorMessage.unauthorized, 401, "UserUpdatePassword");
+      return errorGenerator( errorMessage.unauthorized, 400, "UserUpdatePassword");
     }
 
     const userUpdatePassResponse = await UserService.updatePassword(
